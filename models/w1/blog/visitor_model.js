@@ -54,7 +54,7 @@ let visitorModel = sequelize.define(
     //对应的表名将与model名相同
     freezeTableName: true,
     //表备注
-    comment: "用户访问信息表",
+    comment: "用户访问信表",
     //用户今日今日时间
     createdAt: "createAt",
     //用户访问更新时间
