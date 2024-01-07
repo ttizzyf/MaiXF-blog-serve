@@ -1,6 +1,6 @@
 const sequelize = require("../../../db/mysqlConnection.js");
 const { Sequelize, DataTypes } = require("sequelize");
-//
+// 留言模型
 let messageModel = sequelize.define(
   "message_model",
   {
@@ -17,7 +17,7 @@ let messageModel = sequelize.define(
       comment: "留言用户id",
     },
     content: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -52,9 +52,9 @@ let messageModel = sequelize.define(
     freezeTableName: true,
     //表备注
     comment: "用户留言表",
-    //用户注册时间
+    //用户留言时间
     createdAt: "createAt",
-    // 用户信息更新时间
+    //留言更新时间
     updatedAt: "updateAt",
   }
 );
