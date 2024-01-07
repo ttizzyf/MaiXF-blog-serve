@@ -77,15 +77,15 @@ let blogArticleModel = sequelize.define(
     },
     recommended: {
       type: DataTypes.TINYINT,
-      comment: "是否精选(0是精选,1不是精选)",
+      comment: "是否精选(0是不精选,1是精选)",
     },
     likeToken: {
       type: DataTypes.TINYINT,
-      comment: "点赞的临时标识(0是点赞,1是未点赞)",
+      comment: "点赞的临时标识(0是未点赞,1是点赞)",
     },
     status: {
       type: DataTypes.TINYINT,
-      comment: "状态发布和草稿(0是发布,1是草稿)",
+      comment: "状态发布和草稿(0是删除,1是发布,2是草稿)",
     },
   },
   {

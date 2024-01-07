@@ -50,7 +50,7 @@ let userModel = sequelize.define(
     userType: {
       type: DataTypes.INTEGER(11),
       defaultValue: "user",
-      comment: "用户角色(user表示前台用户,admin表示后台用户,root是管理员)",
+      comment: "用户角色(user表示前台用户,admin表示后台用户)",
     },
     website: {
       type: DataTypes.STRING,
