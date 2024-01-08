@@ -1,5 +1,8 @@
 const bcrypt = require("bcryptjs");
 const request = require("request");
+const Visitor = require("../models/w1/blog/visitor_model.js");
+const sequelize = require("../db/mysqlConnection.js");
+const { Op } = require("sequelize");
 
 /**
  * 获取用户的真实公网IP

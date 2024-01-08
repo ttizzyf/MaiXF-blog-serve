@@ -22,6 +22,12 @@ let visitorModel = sequelize.define(
       notNull: true,
       comment: "操作平台",
     },
+    os: {
+      type: DataTypes.STRING,
+      notEmpty: true,
+      notNull: true,
+      comment: "操作系统",
+    },
     userType: {
       type: DataTypes.INTEGER,
       notEmpty: true,
@@ -45,7 +51,7 @@ let visitorModel = sequelize.define(
       type: DataTypes.STRING,
       notEmpty: true,
       notNull: true,
-      comment: "地址",
+      comment: "访问地址",
     },
   },
   {
@@ -61,3 +67,5 @@ let visitorModel = sequelize.define(
     updatedAt: "updateAt",
   }
 );
+
+module.exports = visitorModel;
