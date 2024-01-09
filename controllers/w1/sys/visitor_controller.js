@@ -43,7 +43,7 @@ exports.generateVisitorRecord = [
               },
               async function (error, response, body) {
                 console.log(chalk.bold.green("------------", response));
-                console.log("Status Code:", response.statusCode);
+                console.log("Status code:", response.statusCode);
                 console.log("Headers:", response.headers);
                 console.log("Body:", body);
                 console.log("error", error);
