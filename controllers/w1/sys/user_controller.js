@@ -275,7 +275,7 @@ exports.emitUser = [
   async (req, res) => {
     try {
       const Userinfo = await userModel.findOne({
-        where: { userId: req.userId },
+        where: { userId: req.user.userId },
       });
       let user = Userinfo.get();
       console.log(user);
@@ -292,7 +292,7 @@ exports.emitUser = [
         return apiResponse.ErrorResponse(res, "数据未进行修改");
       }
       await userModel.update(updateUserInfo, {
-        where: { userId: req.userId },
+        where: { userId: req.user.userId },
       });
       return apiResponse.successResponseWithData(
         res,
