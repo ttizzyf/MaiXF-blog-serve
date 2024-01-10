@@ -14,20 +14,25 @@ const logger = require("./logger.js");
  * @param { Object } params 请求
  * @returns {Promise} 记录成功
  */
-exports.visitorRecord = (req, body, ip) => {
+exports.visitorRecord = (req, ipBody, ip) => {
   return new Promise((resolve, reject) => {
     let userAgent = new UAParser(req.headers["user-agent"]);
     let visitor = {
-      nickname: req.body.nickname || "visitor",
+      nickname: req.user.nickname || "visitor",
       platform:
         userAgent.getBrowser().name + ".v" + userAgent.getBrowser().major,
       os: os.type() + os.release() + " " + os.arch(),
-      userType: body.type, //0 admin 1 manage
+      userType: req.body.type, //0 admin 1 manage
       userIp: ip,
+      visitorInfo: JSON.stringify(ipBody.data),
       loginLocation:
-        body.code === 200
-          ? body.data.country + "-" + body.data.region + "-" + body.data.city
-          : body.msg,
+        ipBody.data.continent !== "保留IP"
+          ? ipBody.data.country +
+            "-" +
+            ipBody.data.prov +
+            "-" +
+            ipBody.data.city
+          : ipBody.data.continent,
     };
     console.log(ip);
     const start = new Date();

@@ -80,6 +80,8 @@ process.on("SIGINT", (signal) => {
   process.exit();
 });
 
+require("./models/w1/blog/visitor_model.js");
+
 // 带路径的用法并且可以打印出路由表 true代表展示路由表在打印台
 mount(app, "./routes", isDev);
 

@@ -55,7 +55,7 @@ const actionRecords = ({ module, content }) => {
       const address = await parseIP(clientIP);
 
       const newUsersOptLog = {
-        operatorId: req.userId || "-",
+        operatorId: req.user.userId || "-",
         operator: req.user?.nickname || req.body?.email || "未知用户",
         module,
         platform: u.getBrowser().name

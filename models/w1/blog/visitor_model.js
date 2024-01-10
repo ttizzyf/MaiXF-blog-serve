@@ -53,12 +53,19 @@ let visitorModel = sequelize.define(
       notNull: true,
       comment: "访问地址",
     },
+    visitorInfo: {
+      type: DataTypes.TEXT,
+      notEmpty: true,
+      notNull: true,
+      comment: "访客信息",
+    },
   },
   {
     // 启动时间，设置为ture会自动生成创建和更新时间，默认字段名称为createAt、updateAt。
     timestamps: true,
     //对应的表名将与model名相同
-    freezeTableName: true,
+    // freezeTableName: true,
+    tableName: "visitor_model",
     //表备注
     comment: "用户访问信表",
     //用户今日今日时间
@@ -67,5 +74,7 @@ let visitorModel = sequelize.define(
     updatedAt: "updateAt",
   }
 );
+
+visitorModel.sync();
 
 module.exports = visitorModel;
