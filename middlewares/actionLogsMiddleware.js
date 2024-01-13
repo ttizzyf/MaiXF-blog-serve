@@ -53,9 +53,9 @@ const actionRecords = ({ module, content }) => {
       const u = new UAParser(req.headers["user-agent"]);
       // 获取用户真实IP地址
       const address = await parseIP(clientIP);
-
+      console.log(req);
       const newUsersOptLog = {
-        operatorId: req.user.userId || "-",
+        operatorId: req.user?.userId || "-",
         operator: req.user?.nickname || req.body?.email || "未知用户",
         module,
         platform: u.getBrowser().name

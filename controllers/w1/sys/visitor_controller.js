@@ -14,19 +14,18 @@ const chalk = require("chalk");
 const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
 const util = require("util");
 
+// 访客记录
 exports.generateVisitorRecord = [
-  tokenAuthentication,
   async (req, res, next) => {
-    // console.log(req);
+    console.log(req.body);
     let ip = getPublicIP(req);
-    console.log("123", ip);
     let userAgent = new UAParser(req.headers["user-agent"]);
     //查询今天之内的访客
     visitorFindOne(visitorModel, { userIp: ip }).then((todayVisitor) => {
       if (!todayVisitor) {
         //当日的新访客
         request(
-          `https://qifu.baidu.com/ip/geo/v1/district?ip=120.55.46.157`,
+          `https://qifu.baidu.com/ip/geo/v1/district?ip=${ip}`,
           {
             method: "GET",
             headers: {
@@ -57,7 +56,7 @@ exports.generateVisitorRecord = [
         updateVisitorCount(
           visitorModel,
           {
-            nickname: req.user.nickname || "visitor",
+            nickname: req.body.nickname || "visitor",
             platform:
               userAgent.getBrowser().name + ".v" + userAgent.getBrowser().major,
             os: os.type() + os.release() + " " + os.arch(),

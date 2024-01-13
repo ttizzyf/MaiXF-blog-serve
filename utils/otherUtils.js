@@ -117,6 +117,7 @@ exports.encryption = function (value) {
 
 /**
  * bcrypt 解密
+ * @date 2023/12/8
  * @param { number , string } value 未加密的值
  * @param { number , string } valueED 已经加密后的值
  * @returns {Promise} true/false 两个密码是否相同
@@ -131,4 +132,22 @@ exports.decryption = function (value, enValue) {
       resolve(same);
     });
   });
+};
+
+/**
+ * 删除对象内空元素
+ * @date 2024/1/13
+ * @param { Object } keywords 传入的未处理的元素
+ * @returns {Object} 经过处理后的对象
+ */
+exports.deleteNullObj = (keywords) => {
+  if (!keywords) {
+    return keywords;
+  }
+  for (let key in keywords) {
+    if (keywords[key] === "") {
+      delete keywords[key];
+    }
+  }
+  return keywords;
 };

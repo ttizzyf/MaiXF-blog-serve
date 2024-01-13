@@ -18,7 +18,7 @@ exports.visitorRecord = (req, ipBody, ip) => {
   return new Promise((resolve, reject) => {
     let userAgent = new UAParser(req.headers["user-agent"]);
     let visitor = {
-      nickname: req.user.nickname || "visitor",
+      nickname: req.body.nickname || "visitor",
       platform:
         userAgent.getBrowser().name + ".v" + userAgent.getBrowser().major,
       os: os.type() + os.release() + " " + os.arch(),
