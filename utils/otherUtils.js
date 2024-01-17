@@ -151,3 +151,19 @@ exports.deleteNullObj = (keywords) => {
   }
   return keywords;
 };
+
+/**
+ * 获取整数天数时间戳
+ * @date 2024/1/17
+ * @param { number } timesTamps 未处理的时间戳
+ * @returns {Object} 处理后的时间戳,当前日期+1
+ */
+exports.getFullTimesTamps = (timesTamps) => {
+  const currentDate = new Date(timesTamps);
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const day = currentDate.getDate() + 1;
+  const toDayStart = new Date(year, month, day, 0, 0, 0);
+  const todayTimestamp = toDayStart.getTime();
+  return todayTimestamp;
+};

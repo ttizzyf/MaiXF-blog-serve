@@ -75,6 +75,4 @@ let visitorModel = sequelize.define(
   }
 );
 
-visitorModel.sync();
-
 module.exports = visitorModel;

@@ -1,5 +1,5 @@
 const sequelize = require("sequelize");
-// 模糊匹配
+// sequlize运算符Op
 const Op = sequelize.Op;
 const { body, validationResult } = require("express-validator");
 const blogArticleModel = require("../../../models/w1/blog/blog_article_model.js");

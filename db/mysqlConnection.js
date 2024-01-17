@@ -18,9 +18,11 @@ const mysql = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PWD,
+
   {
     host: "120.55.46.157",
     dialect: "mysql",
+    timezone: "+08:00", //东八时区
   }
 );
 

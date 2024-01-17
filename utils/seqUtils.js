@@ -17,6 +17,7 @@ function resExtra(data, code = 200, message = "操作成功！") {
 const sequeHandler = (conditions, count) => {
   let queryHandler = {
     where: {},
+    raw: true,
   };
   if (conditions.params) {
     queryHandler.where = utilsTools.deleteNullObj(conditions.params);
@@ -66,15 +67,15 @@ module.exports = {
    * @param  {Function} cb          回调函数
    */
   count: (model, conditions, cb) => {
-    if (!model) return cb(resExtra("", 605, "模型不存在"));
+    if (!model) return cb(resExtra("", 808, "模型不存在"));
     model
-      .findAndCountAll(queryConditions(conditions, "count"))
+      .findAndCountAll(sequeHandler(conditions, "count"))
       .then((data) => {
         cb(resExtra(data.count));
       })
       .catch((err) => {
         logger.error(JSON.stringify(err));
-        cb(resExtra(err, 605, "查询条数失败"));
+        cb(resExtra(err, 808, "查询条数失败"));
       });
   },
 
@@ -97,7 +98,7 @@ module.exports = {
                 order:'desc / asc：升序',
             }
         }*/
-    if (!model) return cb(resExtra("", 605, "模型不存在"));
+    if (!model) return cb(resExtra("", 808, "模型不存在"));
     model
       .findAndCountAll(sequeHandler(conditions, "count"))
       .then((countAll) => {
@@ -115,13 +116,13 @@ module.exports = {
           })
           .catch((err) => {
             logger.error(JSON.stringify(err));
-            cb(resExtra(err, 605, "查询失败"));
+            cb(resExtra(err, 808, "查询失败"));
           });
       })
       .catch((err) => {
         console.log(err);
         logger.error(JSON.stringify(err));
-        cb(resExtra(err, 605, "查询失败"));
+        cb(resExtra(err, 808, "查询失败"));
       });
   },
 
@@ -132,14 +133,14 @@ module.exports = {
    * @param  {Function} cb          回调函数
    */
   findOne: (model, conditions, cb) => {
-    if (!model) return cb(resExtra("", 605, "模型不存在"));
+    if (!model) return cb(resExtra("", 808, "模型不存在"));
     /* 根据主键查询一条数据 参数
         conditions:{
             params:{
             id:'123'
             }
          }*/
-    if (!conditions.params.id) return cb(resExtra("", 605, "查询条件为空！"));
+    if (!conditions.params.id) return cb(resExtra("", 808, "查询条件为空！"));
     model
       .findOne(sequeHandler(conditions))
       .then((data) => {
@@ -147,7 +148,7 @@ module.exports = {
       })
       .catch((err) => {
         logger.error(JSON.stringify(err));
-        cb(resExtra(err, 605, "查询失败"));
+        cb(resExtra(err, 808, "查询失败"));
       });
   },
 
@@ -170,7 +171,7 @@ module.exports = {
       .catch((err) => {
         logger.error(JSON.stringify(err));
         console.log(err);
-        cb(resExtra(err, 605, "创建失败!"));
+        cb(resExtra(err, 808, "创建失败!"));
       });
   },
 
@@ -191,12 +192,12 @@ module.exports = {
         if (data[0]) {
           cb(resExtra(data, 200, "更新成功！"));
         } else {
-          cb(resExtra("", 605, "ID不存在！"));
+          cb(resExtra("", 808, "ID不存在！"));
         }
       })
       .catch((err) => {
         logger.error(JSON.stringify(err));
-        cb(resExtra("", 605, "更新失败!"));
+        cb(resExtra("", 808, "更新失败!"));
       });
   },
 
@@ -216,12 +217,12 @@ module.exports = {
         if (data) {
           cb(resExtra(data, 200, "删除成功！"));
         } else {
-          cb(resExtra("", 605, "ID不存在！"));
+          cb(resExtra("", 808, "ID不存在！"));
         }
       })
       .catch((err) => {
         logger.error(JSON.stringify(err));
-        cb(resExtra("", 605, "删除失败!"));
+        cb(resExtra("", 808, "删除失败!"));
       });
   },
 
@@ -237,12 +238,12 @@ module.exports = {
         if (!data) {
           cb(resExtra(data, 200, "全部删除成功！"));
         } else {
-          cb(resExtra("", 605, "删除失败！"));
+          cb(resExtra("", 808, "删除失败！"));
         }
       })
       .catch((err) => {
         logger.error(JSON.stringify(err));
-        cb(resExtra("", 605, "删除失败!"));
+        cb(resExtra("", 808, "删除失败!"));
       });
   },
 
@@ -260,7 +261,7 @@ module.exports = {
       })
       .catch((err) => {
         logger.error(JSON.stringify(err));
-        cb(resExtra("", 605, "查询失败!"));
+        cb(resExtra("", 808, "查询失败!"));
       });
   },
 };
