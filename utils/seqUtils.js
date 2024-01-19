@@ -61,25 +61,6 @@ const sequeHandler = (conditions, count) => {
 
 module.exports = {
   /**
-   * 查询数据总条数
-   * @param  {Object}   model       模型实例
-   * @param  {Object}   conditions  条件集合
-   * @param  {Function} cb          回调函数
-   */
-  count: (model, conditions, cb) => {
-    if (!model) return cb(resExtra("", 808, "模型不存在"));
-    model
-      .findAndCountAll(sequeHandler(conditions, "count"))
-      .then((data) => {
-        cb(resExtra(data.count));
-      })
-      .catch((err) => {
-        logger.error(JSON.stringify(err));
-        cb(resExtra(err, 808, "查询条数失败"));
-      });
-  },
-
-  /**
    * 查询所有数据
    * @param  {Object}   model       模型实例
    * @param  {Object}   conditions  条件集合

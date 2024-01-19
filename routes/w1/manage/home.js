@@ -18,4 +18,13 @@ const manage_home = require("../../../controllers/w1/manage/index.js");
 
 router.get("/browsing", manage_home.browsing);
 
+/**
+ * 获取博文列表
+ * @route GET /w1/manage/home/weekVistorAndRegister
+ * @group 后台相关 - 一周用户访问及注册量
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.get("/weekVistorAndRegister", manage_home.weekVistorAndRegister);
+
 module.exports = router;
