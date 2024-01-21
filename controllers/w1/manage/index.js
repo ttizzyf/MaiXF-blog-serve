@@ -217,7 +217,7 @@ exports.visitorBrowserType = [
       };
       // sequeUtil.list(visitorModel, pm, (list) => {
       //   console.log(list);
-      // });
+      // })
       const result = await visitorModel.findAll({ raw: true });
       console.log(result);
       return apiResponse.successResponseWithData(res, "请求成功", result);
