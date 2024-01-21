@@ -36,16 +36,12 @@ let replyModel = sequelize.define(
     },
   },
   {
-    // 启动时间，设置为ture会自动生成创建和更新时间，默认字段名称为createAt、updateAt。
+    // 启动时间，设置为ture会自动生成创建和更新时间，默认字段名称为createdAt、updatedAt。
     timestamps: true,
     //对应的表名将与model名相同
     freezeTableName: true,
     //表备注
     comment: "用户回复表",
-    //用户回复时间
-    createdAt: "createAt",
-    // 用户回复更新时间
-    updatedAt: "updateAt",
   }
 );
 

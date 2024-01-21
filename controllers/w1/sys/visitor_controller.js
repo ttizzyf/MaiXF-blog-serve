@@ -65,6 +65,7 @@ exports.generateVisitorRecord = [
           },
           {
             userIp: todayVisitor.userIp,
+            createdAt: todayVisitor.createdAt,
           }
         )
           .then((update) => {

@@ -61,17 +61,13 @@ let visitorModel = sequelize.define(
     },
   },
   {
-    // 启动时间，设置为ture会自动生成创建和更新时间，默认字段名称为createAt、updateAt。
+    // 启动时间，设置为ture会自动生成创建和更新时间，默认字段名称为createdAt、updatedAt。
     timestamps: true,
     //对应的表名将与model名相同
     // freezeTableName: true,
     tableName: "visitor_model",
     //表备注
     comment: "用户访问信表",
-    //用户今日今日时间
-    createdAt: "createAt",
-    //用户访问更新时间
-    updatedAt: "updateAt",
   }
 );
 

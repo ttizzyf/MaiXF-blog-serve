@@ -19,8 +19,8 @@ const sequeHandler = (conditions, count) => {
     where: {},
     raw: true,
   };
-  if (conditions.params) {
-    queryHandler.where = utilsTools.deleteNullObj(conditions.params);
+  if (conditions.where) {
+    queryHandler.where = deleteNullObj(conditions.where);
   }
   //每页条数
   if (conditions.limit) {
@@ -43,9 +43,6 @@ const sequeHandler = (conditions, count) => {
   }
   if (conditions.exclude && !count) {
     queryHandler.attributes = { exclude: [conditions.exclude] };
-  }
-  if (conditions.raw && !count) {
-    queryHandler.raw = true;
   }
   if (conditions.include && !count) {
     queryHandler.include = conditions.include;

@@ -67,7 +67,7 @@ exports.visitorFindOne = (model, pm) => {
           [Op.and]: [
             pm,
             sequelize.where(
-              sequelize.fn("DATE", sequelize.col("createAt")), // 表对应的字段
+              sequelize.fn("DATE", sequelize.col("createdAt")), // 表对应的字段
               // 取当前日期
               sequelize.literal("CURRENT_DATE")
             ),

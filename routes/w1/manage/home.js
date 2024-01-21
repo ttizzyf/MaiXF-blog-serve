@@ -27,4 +27,13 @@ router.get("/browsing", manage_home.browsing);
  */
 router.get("/weekVistorAndRegister", manage_home.weekVistorAndRegister);
 
+/**
+ * 获取用户访问平台流标
+ * @route GET /w1/manage/home/visitorBrowserType
+ * @group 后台相关 - 用户访问平台
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.get("/visitorBrowserType", manage_home.visitorBrowserType);
+
 module.exports = router;

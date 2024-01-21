@@ -28,7 +28,7 @@ exports.client_blog_articleList = [
       let current = req.query.current || 1;
       let pageSize = req.query.pageSize || 15;
       // 排列参数
-      let sortColumn = req.query.columnKey || "createAt"; // 以什么关键词进行排序
+      let sortColumn = req.query.columnKey || "createdAt"; // 以什么关键词进行排序
       let sortOrder = req.query.sortOrder || 1; // 确认排序方式 1 升序 -1降序
       // 搜索条件(没有则不添加)
       let title = req.query.title || "";
