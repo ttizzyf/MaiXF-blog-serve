@@ -15,10 +15,11 @@ let REDIS_CONF;
 if (env === "development") {
   MYSQL_CONF = {
     host: "120.55.46.157",
-    user: "tgq_user",
-    password: "W18880460748",
+    user: "root",
+    password: "w18880460748#",
     port: "3306",
     database: "W_BLOG",
+    dialect: "mysql",
   };
   REDIS_CONF = {
     port: 6379,
@@ -31,10 +32,11 @@ if (env === "development") {
 if (env === "production") {
   MYSQL_CONF = {
     host: "120.55.46.157",
-    user: "tgq_user",
-    password: "W18880460748",
+    user: "root",
+    password: "w18880460748#",
     port: "3306",
     database: "W_BLOG",
+    dialect: "mysql",
   };
   REDIS_CONF = {
     port: 6379,

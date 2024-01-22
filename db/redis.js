@@ -6,7 +6,9 @@ const redisClient = redis
   .createClient({
     url: "redis://120.55.46.157:6379",
   })
-  .connect()
+  .connect(() => {
+    console.log(chalk.bold.green("----------REDIS连接成功------------"));
+  })
   .catch((err) => {
     console.error(chalk.bold.red("----------REDIS连接出错------------", err));
   });

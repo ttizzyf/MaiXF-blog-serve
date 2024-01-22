@@ -6,22 +6,22 @@
 
 const { Sequelize } = require("sequelize");
 const chalk = require("chalk");
+const { MYSQL_CONF } = require("../config/index.js");
 
 console.log(
-  chalk.bold.red(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PWD)
+  chalk.bold.red(MYSQL_CONF.database, MYSQL_CONF.user, MYSQL_CONF.password)
 );
 
 // 第一个参数：连接的数据库名
 // 第二个参数：数据库的用户名
 // 第三个参数：数据库的密码
 const mysql = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PWD,
-
+  MYSQL_CONF.database,
+  MYSQL_CONF.user,
+  MYSQL_CONF.password,
   {
-    host: "120.55.46.157",
-    dialect: "mysql",
+    host: MYSQL_CONF.host,
+    dialect: MYSQL_CONF.dialect,
     timezone: "+08:00", //东八时区
   }
 );

@@ -48,7 +48,7 @@ let userModel = sequelize.define(
       comment: "用户状态(0禁用,1启用)",
     },
     userType: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.STRING,
       defaultValue: "user",
       comment: "用户角色(user表示前台用户,admin表示后台用户)",
     },
