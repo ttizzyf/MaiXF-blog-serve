@@ -23,12 +23,12 @@ const sequeHandler = (conditions, count) => {
     queryHandler.where = deleteNullObj(conditions.where);
   }
   //每页条数
-  if (conditions.limit) {
-    queryHandler.limit = parseInt(conditions.limit);
+  if (conditions.pageSize) {
+    queryHandler.limit = parseInt(conditions.pageSize);
   }
   //当前页
-  if (conditions.offset || conditions.offset === 0) {
-    queryHandler.offset = conditions.limit * (conditions.offset - 1) || 0;
+  if (conditions.pageNum || conditions.pageNum === 0) {
+    queryHandler.offset = conditions.pageSize * (conditions.pageNum - 1) || 0;
   }
   if (conditions.sort) {
     queryHandler.order = [
@@ -87,8 +87,8 @@ module.exports = {
               resExtra({
                 data,
                 count: countAll.count,
-                current: conditions.offset || 1,
-                limit: conditions.limit || 10,
+                current: +conditions.pageNum || 1,
+                limit: +conditions.pageSize || 10,
               })
             );
           })

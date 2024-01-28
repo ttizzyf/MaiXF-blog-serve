@@ -36,4 +36,15 @@ router.get("/weekVistorAndRegister", manage_home.weekVistorAndRegister);
  */
 router.get("/visitorBrowserType", manage_home.visitorBrowserType);
 
+/**
+ * 获取用户访问平台流标
+ * @route GET /w1/manage/home/registerList
+ * @param {string} pageSize 每页大小
+ * @param {string} password 页数
+ * @group 后台相关 - 用户访问平台
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.get("/registerList", manage_home.registerList);
+
 module.exports = router;

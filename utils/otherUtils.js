@@ -30,6 +30,7 @@ exports.getPublicIP = function (req) {
  */
 exports.parseIP = function (clientIp) {
   return new Promise((resolve, reject) => {
+    console.log(clientIp);
     request(
       `https://opendata.baidu.com/api.php?query=[${clientIp}]&co=&resource_id=6006&oe=utf8`,
       { method: "GET" },
@@ -39,7 +40,8 @@ exports.parseIP = function (clientIp) {
           return;
         }
         if (body && !body.status) {
-          resolve((body.length && JSON.parse(body).data[0].location) || "-");
+          console.log(JSON.parse(body).data);
+          resolve((body.length && JSON.parse(body).data[0]?.location) || "-");
         }
       }
     );

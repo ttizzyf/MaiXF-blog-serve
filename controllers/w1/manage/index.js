@@ -184,43 +184,92 @@ exports.weekVistorAndRegister = [
  * @returns {Object} - 获取访客记录
  */
 
-// 查询函数处理
-const pmAPI = (type) => {
-  return (pm = {
-    where: {
-      platform: {
-        [Op.like]: type,
-      },
-    },
-    raw: true,
-  });
-};
-
 exports.visitorBrowserType = [
   async (req, res, next) => {
     try {
       // 定义平台类型
       const platformTypes = ["Chrome", "Firefox", "Edge", "IE"];
-      // 构建模糊匹配条件
-      const platformConditions = platformTypes.map((type) => ({
-        [Op.like]: `%${type}`,
-      }));
-
-      let response = [];
-      let pm = {
-        where: {
-          platform: {
-            [Op.like]: "%Chrome",
+      // 定义存储结果的数组
+      let platformCounts = [];
+      // 循环遍历平台类型数组，针对每个平台类型进行模糊匹配和求和操作
+      for (const platform of platformTypes) {
+        // 构建单个平台类型的查询条件
+        const condition = {
+          where: {
+            platform: {
+              [Op.like]: `%${platform}%`, // 使用模糊匹配条件
+            },
           },
+          attributes: [
+            [sequelize.fn("SUM", sequelize.col("count")), "platformCount"], // 计算每个平台的总数
+          ],
+          raw: true, // 返回原始数据，方便处理
+        };
+        // 执行查询和求和操作
+        const result = await visitorModel.findOne(condition);
+        // 将查询结果添加到存储结果的数组中
+        platformCounts.push({
+          platform: platform,
+          platformCount: parseInt(result.platformCount) || 0, // 如果结果为空，则设置为0
+        });
+      }
+      let otherPm = [];
+      platformTypes.forEach((item) => {
+        otherPm.push({
+          platform: {
+            [Op.notLike]: `%${item}%`,
+          },
+        });
+      });
+
+      // 构建其他平台的查询条件
+      const otherCondition = {
+        where: {
+          [Op.and]: otherPm,
         },
-        raw: true,
+        attributes: [
+          [sequelize.fn("SUM", sequelize.col("count")), "platformCount"], // 计算其他平台的总数
+        ],
+        raw: true, // 返回原始数据，方便处理
       };
-      // sequeUtil.list(visitorModel, pm, (list) => {
-      //   console.log(list);
-      // }
-      const result = await visitorModel.findAll({ raw: true });
-      console.log(result);
-      return apiResponse.successResponseWithData(res, "请求成功", result);
+      // 执行其他平台的查询和求和操作
+      const otherResult = await visitorModel.findOne(otherCondition);
+
+      // 将其他平台的访问量添加到结果数组中
+      platformCounts.push({
+        platform: "other",
+        platformCount: parseInt(otherResult.platformCount) || 0, // 如果结果为空，则设置为0
+      });
+      return apiResponse.successResponseWithData(
+        res,
+        "请求成功",
+        platformCounts
+      );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+/**
+ * 获取用户注册列表
+ * @date 2023/1/19
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 获取用户注册列表
+ */
+exports.registerList = [
+  async (req, res, next) => {
+    try {
+      let pm = req.query;
+      sequeUtil.list(userModel, pm, (list) => {
+        return apiResponse.successResponseWithData(
+          res,
+          "数据请求成功",
+          list.data
+        );
+      });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
