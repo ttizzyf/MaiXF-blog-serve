@@ -11,7 +11,7 @@ const blog_article_controller = require("../../../controllers/w1/blog/blog_artic
  * 获取博文列表
  * @route GET /w1/blog/blog_article/list
  * @group 博文相关 - 博文管理相关接口
- * @param {string} current 当前页码
+ * @param {string} pageNum 当前页码
  * @param {string} pageSize 页面大小
  * @param {string} title 博客名称
  * @param {string} columnKey 排列关键词

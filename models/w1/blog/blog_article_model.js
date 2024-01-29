@@ -5,11 +5,11 @@ let blogArticleModel = sequelize.define(
   "blog_article",
   {
     id: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
+      type: DataTypes.UUID,
+      notNull: true,
       primaryKey: true,
-      autoIncrement: true,
       comment: "博文id",
+      defaultValue: DataTypes.UUIDV4,
     },
     title: {
       type: DataTypes.STRING,
@@ -53,19 +53,22 @@ let blogArticleModel = sequelize.define(
     },
     category: {
       type: DataTypes.STRING,
-      comment: "分类",
+      comment: "分类(1是技术,2是生活,3是其他)",
     },
     viewNum: {
       type: DataTypes.INTEGER(11),
       comment: "浏览量",
+      defaultValue: 0,
     },
     likeNum: {
       type: DataTypes.INTEGER(11),
       comment: "点赞量",
+      defaultValue: 0,
     },
     isReship: {
-      type: DataTypes.STRING,
-      comment: "是否转载",
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0,
+      comment: "是否转载(0是非转载1是转载)",
     },
     isReshipUrl: {
       type: DataTypes.STRING,
@@ -76,16 +79,19 @@ let blogArticleModel = sequelize.define(
       comment: "转载文章名称(转载后的名字)",
     },
     recommended: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.BOOLEAN,
       comment: "是否精选(0是不精选,1是精选)",
+      defaultValue: 0,
     },
     likeToken: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.BOOLEAN,
       comment: "点赞的临时标识(0是未点赞,1是点赞)",
+      defaultValue: 0,
     },
     status: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.BOOLEAN,
       comment: "状态发布和草稿(0是删除,1是发布,2是草稿)",
+      defaultValue: 2,
     },
   },
   {
