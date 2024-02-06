@@ -5,10 +5,10 @@ let messageModel = sequelize.define(
   "message_model",
   {
     messageId: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
+      type: DataTypes.UUID,
+      notNull: true,
       primaryKey: true,
-      autoIncrement: true,
+      defaultValue: DataTypes.UUIDV4,
       comment: "留言内容ID",
     },
     userId: {

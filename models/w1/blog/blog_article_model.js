@@ -1,5 +1,6 @@
 const sequelize = require("../../../db/mysqlConnection.js");
 const { Sequelize, DataTypes } = require("sequelize");
+const userModel = require("./user_model.js");
 
 let blogArticleModel = sequelize.define(
   "blog_article",
@@ -28,11 +29,11 @@ let blogArticleModel = sequelize.define(
       comment: "博文封面",
     },
     abstract: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       comment: "博文摘要",
     },
     content: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT("long"),
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -40,10 +41,12 @@ let blogArticleModel = sequelize.define(
       comment: "博文内容",
     },
     userId: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
-      validate: {
-        notEmpty: true,
+      type: DataTypes.UUID,
+      notNull: true,
+      primaryKey: true,
+      references: {
+        model: userModel,
+        key: "userId",
       },
       comment: "作者",
     },
@@ -52,7 +55,7 @@ let blogArticleModel = sequelize.define(
       comment: "备注",
     },
     category: {
-      type: DataTypes.STRING,
+      type: DataTypes.BOOLEAN,
       comment: "分类(1是技术,2是生活,3是其他)",
     },
     viewNum: {
@@ -68,7 +71,7 @@ let blogArticleModel = sequelize.define(
     isReship: {
       type: DataTypes.BOOLEAN,
       defaultValue: 0,
-      comment: "是否转载(0是非转载1是转载)",
+      comment: "是否转载(1是转载2是原创)",
     },
     isReshipUrl: {
       type: DataTypes.STRING,

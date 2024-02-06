@@ -37,7 +37,6 @@ function tokenAuthentication(req, res, next) {
       //抛出错误给全局错误信息处理
       return next(err);
     }
-    console.log(req.user);
     req.user = req.user;
     next();
   });

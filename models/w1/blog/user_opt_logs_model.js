@@ -5,10 +5,10 @@ let userOptLogsModel = sequelize.define(
   "users_opt_logs",
   {
     actionId: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
+      type: DataTypes.UUID,
+      notNull: true,
       primaryKey: true,
-      autoIncrement: true,
+      defaultValue: DataTypes.UUIDV4,
       comment: "操作ID",
     },
     operatorId: {

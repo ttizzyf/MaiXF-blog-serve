@@ -12,6 +12,7 @@ const isDev = process.env.NODE_ENV === "development";
 const sessionAuth = require("./middlewares/sessionMiddleware");
 const redisClient = require("./db/redis.js");
 const RedisStore = require("connect-redis").default;
+const sequelize = require("sequelize");
 // 响应api工具函数
 const apiResponse = require("./utils/apiResponse.js");
 // 可以指定目录,进行解析分配路由,每一层路由就是

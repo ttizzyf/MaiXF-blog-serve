@@ -5,11 +5,11 @@ let userModel = sequelize.define(
   "user_info",
   {
     userId: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
+      type: Sequelize.UUID,
+      notNull: true,
       primaryKey: true,
-      autoIncrement: true,
-      comment: "用户id",
+      defaultValue: DataTypes.UUIDV4,
+      comment: "用户ID",
     },
     avatar: {
       type: DataTypes.STRING,

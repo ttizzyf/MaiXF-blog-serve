@@ -26,7 +26,7 @@
     "jade": "~1.11.0",
     "jsonwebtoken": "^9.0.2",
     "log4js": "^6.9.1",
-    "marked": "^7.0.1",
+    "marked": "^12.0.0",
     "module-alias": "^2.2.3",
     "morgan": "~1.9.1",
     "mount-routes": "^1.0.8",

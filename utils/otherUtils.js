@@ -169,3 +169,32 @@ exports.getFullTimesTamps = (timesTamps) => {
   const todayTimestamp = toDayStart.getTime();
   return todayTimestamp;
 };
+
+/**
+ * 模型获取数据转换
+ * @date 2024/2/2
+ * @param { Array } list 未转换的数据
+ * @param { string } str 需要转换的字符串
+ * @param { string } arrName 需要转换的数组名
+ * @returns { Array } 转换后的数据
+ */
+
+exports.modelData = (list, str, arrName) => {
+  let newList = [];
+  list.forEach((item) => {
+    let newData = {};
+    let subData = {}; // 初始化用于存储以特定字符串开始的键的对象
+
+    for (const key in item) {
+      if (key.startsWith(str + ".")) {
+        const userInfoKey = key.replace(str + ".", "");
+        subData[userInfoKey] = item[key]; // 将这些键放入subData中
+      } else {
+        newData[key] = item[key]; // 其他键直接放入newData中
+      }
+    }
+    newData[arrName] = subData; // 最后，将subData设置为newData的一个属性
+    newList.push(newData);
+  });
+  return newList;
+};

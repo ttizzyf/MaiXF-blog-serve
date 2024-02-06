@@ -5,10 +5,10 @@ let replyModel = sequelize.define(
   "reply_model",
   {
     replyId: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
+      type: DataTypes.UUID,
+      notNull: true,
       primaryKey: true,
-      autoIncrement: true,
+      defaultValue: DataTypes.UUIDV4,
       comment: "本条回复ID",
     },
     replyMessageId: {

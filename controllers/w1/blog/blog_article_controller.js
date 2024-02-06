@@ -3,17 +3,28 @@ const sequelize = require("sequelize");
 const Op = sequelize.Op;
 const { body, validationResult } = require("express-validator");
 const blogArticleModel = require("../../../models/w1/blog/blog_article_model.js");
+const userModel = require("../../../models/w1/blog/user_model.js");
 const apiResponse = require("../../../utils/apiResponse.js");
-const { getPublicIP } = require("../../../utils/otherUtils.js");
+const { getPublicIP, modelData } = require("../../../utils/otherUtils.js");
 const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
 const seqUtils = require("../../../utils/seqUtils.js");
 const {
-  uploadMiddleware,
+  uploadFileMiddleware,
 } = require("../../../middlewares/uploadMiddleware.js");
+const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
 const fs = require("fs");
 const path = require("path");
 const marked = require("marked");
 const chalk = require("chalk");
+
+let objStr = "userInfo";
+
+blogArticleModel.belongsTo(userModel, {
+  foreignKey: "userId", // 指定外键，即文章表中关联用户的字段
+  targetKey: "userId", // 指定关联的模型的主键，即用户表中关联用户的字段
+  as: objStr,
+});
+userModel.hasMany(blogArticleModel, { foreignKey: "userId", as: "article" });
 
 /**
  * 前台获取博文列表
@@ -26,15 +37,199 @@ const chalk = require("chalk");
 exports.client_blog_articleList = [
   async (req, res, next) => {
     try {
-      let pm;
-
-      return apiResponse.successResponseWithData(
-        res,
-        "success",
-        articleList.length > 0 ? articleList : []
-      );
+      let {
+        pageNum = 1,
+        pageSize = 10,
+        title = "",
+        category = "",
+        recommended = "",
+        isReship = "",
+      } = req.query;
+      let pm = {
+        where: {
+          title,
+          category,
+          recommended,
+          isReship,
+          status: {
+            [Op.not]: 0,
+          },
+        },
+        pageSize,
+        pageNum,
+        attributes: [
+          "id",
+          "title",
+          "category",
+          "cover",
+          "viewNum",
+          "likeNum",
+          "status",
+          "recommended",
+          "isReship",
+          "createdAt",
+        ],
+        include: [
+          {
+            model: userModel,
+            attributes: ["userId", "nickname", "email"], // 指定要返回的用户字段
+            as: objStr,
+          },
+        ],
+        sort: {
+          prop: "createdAt",
+          order: "desc",
+        },
+      };
+      pm.where.title
+        ? (pm.where.title = { [Op.substring]: `%${pm.where.title}%` })
+        : (pm.where.title = "");
+      seqUtils.list(blogArticleModel, pm, (list) => {
+        let newList = modelData(list.data.data, objStr, objStr);
+        list.data.data = newList;
+        return apiResponse.successResponseWithData(res, "success", list.data);
+      });
     } catch (err) {
       next(err);
+    }
+  },
+];
+
+/**
+ * 通过id修改获取博文
+ * @date 2023/2/3
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+
+exports.blog_article_update = [
+  async (req, res, next) => {
+    try {
+      let pm = req.body;
+      key = { id: req.body.id };
+      seqUtils.update(blogArticleModel, pm, key, (data) => {
+        if (data.code === 200) {
+          return apiResponse.successResponse(res, data.message);
+        } else {
+          return apiResponse.ErrorResponse(res, data.message);
+        }
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];
+
+/**
+ * 通过id查询文章详情
+ * @date 2023/2/3
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+
+exports.get_article_details = [
+  async (req, res, next) => {
+    try {
+      let pm = {};
+      pm.where = req.body;
+      seqUtils.findOne(blogArticleModel, pm, (data) => {
+        if (data.code === 200) {
+          return apiResponse.successResponseWithData(
+            res,
+            data.message,
+            data.data
+          );
+        } else {
+          return apiResponse.ErrorResponse(res, data.message);
+        }
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];
+
+/**
+ * 上传md文件并解析
+ * @date 2023/2/6
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+exports.upload_article_md = [
+  tokenAuthentication,
+  uploadFileMiddleware("uploads/"),
+  async (req, res) => {
+    try {
+      if (!req.file) return apiResponse.ErrorResponse(res, "没有上传文件");
+      const file = req.file;
+      const fileName = file.filename;
+      const filePath = path.join(process.cwd(), "uploads/files", fileName);
+      fs.readFile(filePath, "utf8", (err, data) => {
+        if (err) {
+          // 文件读取失败
+          console.error(err);
+          return apiResponse.ErrorResponse(res, "文件不存在");
+        }
+        let fileData = data;
+        // 提取图片地址
+        const imgSrcRegex = /<img[^>]+src="([^">]+)"/g;
+        const imgSrcMatches = fileData.match(imgSrcRegex);
+        const imageUrls = imgSrcMatches
+          ? imgSrcMatches.map((match) => match.match(/src="([^">]+)"/)[1])
+          : [];
+        // 提取部分文字作为摘要
+        const excerptLength = 150; // 摘要长度
+        const cleanedFileData = marked
+          .parse(fileData)
+          .replace(/<\/?[^>]+(>|$)/g, "")
+          .replace(/\n/g, "")
+          .replace(/\\"/g, ""); // 移除 HTML 标签
+        const plainTextExcerpt = cleanedFileData.slice(0, excerptLength);
+
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error(err);
+            return apiResponse.ErrorResponse(res, "文件删除失败");
+          }
+          // 返回成功响应
+          return apiResponse.successResponseWithData(res, "解析成功", {
+            fileName,
+            fileData,
+            imageUrls,
+            plainTextExcerpt,
+          });
+        });
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+/**
+ * 删除博文
+ * @date 2023/2/6
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+exports.delete_article = [
+  tokenAuthentication,
+  actionRecords({ module: "删除博文" }),
+  async (req, res) => {
+    try {
+      seqUtils.update(blogArticleModel, { status: 0 }, req.body, (data) => {
+        if (data.code === 200) {
+          return apiResponse.successResponse(res, "删除成功");
+        } else {
+          return apiResponse.ErrorResponse(res, data.message);
+        }
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];

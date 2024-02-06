@@ -49,7 +49,6 @@ const uploadFileMiddleware = (uploadFilePath, uploadFileName = "file") => {
   const upload = multer({
     storage,
   });
-
   return upload.single(uploadFileName);
 };
 
