@@ -5,7 +5,11 @@ const { body, validationResult } = require("express-validator");
 const blogArticleModel = require("../../../models/w1/blog/blog_article_model.js");
 const userModel = require("../../../models/w1/blog/user_model.js");
 const apiResponse = require("../../../utils/apiResponse.js");
-const { getPublicIP, modelData } = require("../../../utils/otherUtils.js");
+const {
+  getPublicIP,
+  modelData,
+  deleteNullObj,
+} = require("../../../utils/otherUtils.js");
 const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
 const seqUtils = require("../../../utils/seqUtils.js");
 const {
@@ -35,6 +39,7 @@ userModel.hasMany(blogArticleModel, { foreignKey: "userId", as: "article" });
  */
 
 exports.client_blog_articleList = [
+  tokenAuthentication,
   async (req, res, next) => {
     try {
       let {
@@ -104,6 +109,7 @@ exports.client_blog_articleList = [
  */
 
 exports.blog_article_update = [
+  tokenAuthentication,
   async (req, res, next) => {
     try {
       let pm = req.body;
@@ -130,6 +136,7 @@ exports.blog_article_update = [
  */
 
 exports.get_article_details = [
+  tokenAuthentication,
   async (req, res, next) => {
     try {
       let pm = {};
@@ -188,7 +195,6 @@ exports.upload_article_md = [
           .replace(/\n/g, "")
           .replace(/\\"/g, ""); // 移除 HTML 标签
         const plainTextExcerpt = cleanedFileData.slice(0, excerptLength);
-
         fs.unlink(filePath, (err) => {
           if (err) {
             console.error(err);
@@ -221,12 +227,37 @@ exports.delete_article = [
   actionRecords({ module: "删除博文" }),
   async (req, res) => {
     try {
+      console.log(req.user);
       seqUtils.update(blogArticleModel, { status: 0 }, req.body, (data) => {
         if (data.code === 200) {
           return apiResponse.successResponse(res, "删除成功");
         } else {
           return apiResponse.ErrorResponse(res, data.message);
         }
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+/**
+ * 新建博文
+ * @date 2023/2/10
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+
+exports.new_create_article = [
+  tokenAuthentication,
+  actionRecords({ module: "新建博文" }),
+  async (req, res) => {
+    try {
+      let pm = deleteNullObj(req.body);
+      pm.userId = req.user.userId;
+      seqUtils.create(blogArticleModel, pm, (info) => {
+        return apiResponse.successResponse(res, "新建成功");
       });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);

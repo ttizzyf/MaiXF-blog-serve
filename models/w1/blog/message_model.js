@@ -11,17 +11,27 @@ let messageModel = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       comment: "留言内容ID",
     },
+    messagePid: {
+      type: DataTypes.UUID,
+      comment: "父级ID",
+    },
     userId: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
-      comment: "留言用户id",
+      type: DataTypes.UUID,
+      notNull: true,
+      comment: "本条消息用户id",
+    },
+    toUserId: {
+      type: DataTypes.UUID,
+      comment: "回复用户id",
+    },
+    relatedArticleId: {
+      type: DataTypes.UUID,
+      defaultValue: 0,
+      comment: "是否为文章评论(如果是文章评论,值为文章ID,如果是留言,则为0)",
     },
     content: {
       type: DataTypes.TEXT,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
+      notNull: true,
       comment: "留言内容",
     },
     hidden: {
@@ -29,11 +39,7 @@ let messageModel = sequelize.define(
       comment: "是否隐藏(0是隐藏,1是展示)",
       defaultValue: 1,
     },
-    relatedArticleId: {
-      type: DataTypes.INTEGER(11),
-      defaultValue: 0,
-      comment: "是否为文章评论(如果是文章评论,值为文章ID,如果是留言,则为0)",
-    },
+
     likeNum: {
       type: DataTypes.INTEGER(6),
       defaultValue: 0,
@@ -54,5 +60,10 @@ let messageModel = sequelize.define(
     comment: "用户留言表",
   }
 );
+
+// (async () => {
+//   await messageModel.sync({ force: true });
+//   // 这里是代码
+// })();
 
 module.exports = messageModel;

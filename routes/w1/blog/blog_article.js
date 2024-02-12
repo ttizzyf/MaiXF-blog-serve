@@ -24,6 +24,15 @@ const blog_article_controller = require("../../../controllers/w1/blog/blog_artic
 router.get("/list", blog_article_controller.client_blog_articleList);
 
 /**
+ * 新建博文
+ * @route POST /w1/blog/blog_article/create
+ * @group 博文相关 - 博文管理相关接口
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.post("/create", blog_article_controller.new_create_article);
+
+/**
  * 根据id修改博文
  * @route POST /w1/blog/blog_article/update
  * @group 博文相关 - 博文管理相关接口
