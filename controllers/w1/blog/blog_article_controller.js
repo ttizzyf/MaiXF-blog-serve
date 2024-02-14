@@ -264,3 +264,26 @@ exports.new_create_article = [
     }
   },
 ];
+
+/**
+ * 获取博文列表
+ * @date 2023/2/15
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+exports.get_blog_select_list = [
+  async (req, res, next) => {
+    try {
+      let pm = {
+        attributes: ["id", "title"],
+        raw: true,
+      };
+      blogArticleModel.findAll(pm).then((list) => {
+        return apiResponse.successResponseWithData(res, "获取成功", list);
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];

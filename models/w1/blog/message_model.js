@@ -1,5 +1,7 @@
 const sequelize = require("../../../db/mysqlConnection.js");
 const { Sequelize, DataTypes } = require("sequelize");
+const userModel = require("./user_model.js");
+const blogArticleModel = require("./blog_article_model.js");
 // 留言模型
 let messageModel = sequelize.define(
   "message_model",
@@ -26,7 +28,6 @@ let messageModel = sequelize.define(
     },
     relatedArticleId: {
       type: DataTypes.UUID,
-      defaultValue: 0,
       comment: "是否为文章评论(如果是文章评论,值为文章ID,如果是留言,则为0)",
     },
     content: {
@@ -65,5 +66,32 @@ let messageModel = sequelize.define(
 //   await messageModel.sync({ force: true });
 //   // 这里是代码
 // })();
+
+// 评论与用户是一对多的关系
+userModel.hasOne(messageModel, {
+  foreignKey: "userId", // 指定外键，即评论表中关联用户的字段
+  as: "userInfo",
+});
+
+messageModel.belongsTo(userModel, {
+  foreignKey: "userId", // 指定外键，即评论表中关联用户的字段
+  as: "userInfo",
+});
+
+// 设置与 toUserId 关联的关系
+messageModel.belongsTo(userModel, {
+  foreignKey: "toUserId", // 指定外键，即评论表中关联用户的字段
+  as: "toUserInfo",
+});
+
+messageModel.belongsTo(blogArticleModel, {
+  foreignKey: "relatedArticleId", // 指定外键，即评论表中关联用户的字段
+  as: "articleInfo",
+});
+
+blogArticleModel.hasMany(messageModel, {
+  foreignKey: "relatedArticleId", // 指定外键，即评论表中关联用户的字段
+  as: "messageInfo",
+});
 
 module.exports = messageModel;

@@ -118,7 +118,6 @@ module.exports = {
             id:'123'
             }
          }*/
-    if (!conditions.where.id) return cb(resExtra("", 808, "查询条件为空！"));
     model
       .findOne(sequeHandler(conditions))
       .then((data) => {
