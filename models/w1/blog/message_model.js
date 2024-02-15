@@ -28,7 +28,7 @@ let messageModel = sequelize.define(
     },
     relatedArticleId: {
       type: DataTypes.UUID,
-      comment: "是否为文章评论(如果是文章评论,值为文章ID,如果是留言,则为0)",
+      comment: "是否为文章评论(如果是文章评论,值为文章ID,如果是留言,则为null)",
     },
     content: {
       type: DataTypes.TEXT,
@@ -40,7 +40,6 @@ let messageModel = sequelize.define(
       comment: "是否隐藏(0是隐藏,1是展示)",
       defaultValue: 1,
     },
-
     likeNum: {
       type: DataTypes.INTEGER(6),
       defaultValue: 0,

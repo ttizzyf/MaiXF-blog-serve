@@ -30,4 +30,31 @@ router.get("/list", blog_comment_controller.client_blog_commentList);
  */
 router.post("/likeOrOppose", blog_comment_controller.client_blog_likeOrOppose);
 
+/**
+ * 新增文章评论或留言
+ * @route POST /w1/blog/blog_comment/create
+ * @group 博文相关 - 博文评论相关接口
+ * @param {string} messagePid 父级id
+ * @param {string} userId 本条消息用户id
+ * @param {string} toUserId 回复用户id
+ * @param {string} relatedArticleId 是否为文章评论(如果是文章评论,值为文章ID,如果是留言,则为null)
+ * @param {string} content 留言或评论内容
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.post("/create", blog_comment_controller.client_blog_comment_create);
+
+/**
+ * 新增文章评论或留言
+ * @route POST /w1/blog/blog_comment/update
+ * @group 博文相关 - 博文评论相关接口
+ * @param {string} messageId 消息id
+ * @param {string} relatedArticleId 是否为文章评论(如果是文章评论,值为文章ID,如果是留言,则为null)
+ * @param {string} content 留言或评论内容
+ * @param {string} hidden 是否隐藏(0是隐藏,1是展示)
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.post("/update", blog_comment_controller.client_blog_comment_update);
+
 module.exports = router;

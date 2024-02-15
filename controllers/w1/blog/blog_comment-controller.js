@@ -9,6 +9,7 @@ const messageModel = require("../../../models/w1/blog/message_model.js");
 const userModel = require("../../../models/w1/blog/user_model.js");
 const blogArticleModel = require("../../../models/w1/blog/blog_article_model.js");
 const { modelData } = require("../../../utils/otherUtils.js");
+const { deleteNullObj } = require("../../../utils/otherUtils.js");
 const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
@@ -140,6 +141,65 @@ exports.client_blog_likeOrOppose = [
           }
           return apiResponse.successResponse(res, "操作成功");
         });
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];
+
+/**
+ * 新建文章评论或留言
+ * @date 2023/2/15
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+exports.client_blog_comment_create = [
+  tokenAuthentication,
+  actionRecords({ module: "新增留言或评论" }),
+  async (req, res, next) => {
+    try {
+      let pm = deleteNullObj(req.body);
+      pm.userId = req.user.userId;
+      console.log(pm);
+      seqUtils.create(messageModel, pm, (data) => {
+        if (data.code === 808) {
+          return apiResponse.ErrorResponse(res, "创建失败");
+        }
+        return apiResponse.successResponse(res, "评论成功");
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];
+
+/**
+ * 修改文章评论
+ * @date 2023/2/15
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+exports.client_blog_comment_update = [
+  tokenAuthentication,
+  actionRecords({ module: "修改留言或评论" }),
+  async (req, res, next) => {
+    try {
+      console.log(req.body);
+      let key = {
+        messageId: req.body.messageId,
+      };
+      let obj = {
+        relatedArticleId: req.body.relatedArticleId,
+        content: req.body.content,
+      };
+      seqUtils.update(messageModel, obj, key, (data) => {
+        if (data.code === 808) {
+          return apiResponse.ErrorResponse(res, "修改失败");
+        }
+        return apiResponse.successResponse(res, "修改成功");
       });
     } catch (err) {
       next(err);
