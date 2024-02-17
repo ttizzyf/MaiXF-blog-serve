@@ -34,6 +34,7 @@ exports.client_blog_commentList = [
         messagePid: {
           [Op.is]: null,
         },
+        hidden: 1,
         content: req.query.comment,
       };
       pm.where.content
@@ -51,6 +52,10 @@ exports.client_blog_commentList = [
           as: "articleInfo",
         },
       ];
+      pm.sort = {
+        prop: "createdAt",
+        order: "desc",
+      };
       console.log(pm);
       seqUtils.list(messageModel, pm, async (list) => {
         console.log(list);
@@ -61,12 +66,10 @@ exports.client_blog_commentList = [
         newList.forEach((item, index) => {
           let sonItem = {
             raw: true,
-            sort: {
-              prop: "createdAt",
-              order: "desc",
-            },
+            order: [["createdAt", "DESC"]],
             where: {
               messagePid: item.messageId,
+              hidden: 1,
             },
             include: [
               {
@@ -192,14 +195,62 @@ exports.client_blog_comment_update = [
         messageId: req.body.messageId,
       };
       let obj = {
-        relatedArticleId: req.body.relatedArticleId,
+        relatedArticleId: req.body?.relatedArticleId || "",
         content: req.body.content,
       };
-      seqUtils.update(messageModel, obj, key, (data) => {
+      seqUtils.update(messageModel, deleteNullObj(obj), key, (data) => {
         if (data.code === 808) {
           return apiResponse.ErrorResponse(res, "修改失败");
         }
-        return apiResponse.successResponse(res, "修改成功");
+        // 当一级评论修改文章选项之后,需要评论回复也将文章选项修改
+        if (req.body?.relatedArticleId) {
+          let replyKey = {
+            messagePid: req.body.messageId,
+          };
+          let replyObj = {
+            relatedArticleId: req.body?.relatedArticleId,
+          };
+          seqUtils.update(messageModel, replyObj, replyKey, (replyData) => {
+            if (data.code === 808) {
+              return apiResponse.ErrorResponse(res, "修改失败");
+            }
+            return apiResponse.successResponse(res, "修改成功");
+          });
+        } else {
+          return apiResponse.successResponse(res, "修改成功");
+        }
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];
+
+/**
+ * 删除文章评论
+ * @date 2023/2/17
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+exports.client_blog_comment_delete = [
+  tokenAuthentication,
+  actionRecords({ module: "删除留言或评论" }),
+  async (req, res, next) => {
+    try {
+      let key = {
+        messageId: req.body.messageId,
+      };
+      seqUtils.update(messageModel, { hidden: 0 }, key, (data) => {
+        if (data.code === 808) {
+          return apiResponse.ErrorResponse(res, "删除失败");
+        }
+        let replyKey = {
+          messagePid: req.body.messageId,
+        };
+        seqUtils.update(messageModel, { hidden: 0 }, replyKey, (ReplyData) => {
+          return apiResponse.successResponse(res, "删除成功");
+        });
       });
     } catch (err) {
       next(err);

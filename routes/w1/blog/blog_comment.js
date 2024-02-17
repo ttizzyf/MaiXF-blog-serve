@@ -5,7 +5,7 @@
  */
 const express = require("express");
 const router = express.Router();
-const blog_comment_controller = require("../../../controllers/w1/blog/blog_comment-controller.js");
+const blog_comment_controller = require("../../../controllers/w1/blog/blog_comment_controller.js");
 
 /**
  * 获取博文评论列表
@@ -13,7 +13,7 @@ const blog_comment_controller = require("../../../controllers/w1/blog/blog_comme
  * @group 博文相关 - 博文评论相关接口
  * @param {string} pageNum 当前页码
  * @param {string} pageSize 页面大小
- * @param {string} comment 博客名称
+ * @param {string} comment 留言内容
  * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
  * @returns {Error}  default - Unexpected error
  */
@@ -56,5 +56,15 @@ router.post("/create", blog_comment_controller.client_blog_comment_create);
  * @returns {Error}  default - Unexpected error
  */
 router.post("/update", blog_comment_controller.client_blog_comment_update);
+
+/**
+ * 删除文章评论或留言
+ * @route POST /w1/blog/blog_comment/delete
+ * @group 博文相关 - 博文评论相关接口
+ * @param {string} messageId 消息id
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.post("/delete", blog_comment_controller.client_blog_comment_delete);
 
 module.exports = router;
