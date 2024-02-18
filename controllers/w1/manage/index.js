@@ -19,6 +19,7 @@ const dayjs = require("dayjs");
  */
 
 exports.browsing = [
+  tokenAuthentication,
   async (req, res) => {
     try {
       const today = getFullTimesTamps(new Date());
@@ -121,6 +122,7 @@ const formatData = (days, list) => {
 };
 
 exports.weekVistorAndRegister = [
+  tokenAuthentication,
   async (req, res, next) => {
     try {
       const today = getFullTimesTamps(new Date());
@@ -185,6 +187,7 @@ exports.weekVistorAndRegister = [
  */
 
 exports.visitorBrowserType = [
+  tokenAuthentication,
   async (req, res, next) => {
     try {
       // 定义平台类型
@@ -260,6 +263,7 @@ exports.visitorBrowserType = [
  * @returns {Object} - 获取用户注册列表
  */
 exports.registerList = [
+  tokenAuthentication,
   async (req, res, next) => {
     try {
       let pm = req.query;
