@@ -42,4 +42,16 @@ router.post("/resetPassword", user.resetPassword);
  */
 router.post("/userIsEnable", user.userIsEnable);
 
+/**
+ * 获取用户操作日志
+ * @route POST /w1/manage/user/optlogs
+ * @group 博文相关 - 博文评论相关接口
+ * @param {number} pageNum 当前页码
+ * @param {number} pageSize 页面大小
+ * @param {string} userId 用户id
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.get("/optlogs", user.optlogs);
+
 module.exports = router;

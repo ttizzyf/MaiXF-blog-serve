@@ -2,6 +2,7 @@ const sequelize = require("sequelize");
 // sequlize运算符Op
 const Op = sequelize.Op;
 const userModel = require("../../../models/w1/blog/user_model.js");
+const userOptLogsModel = require("../../../models/w1/blog/user_opt_logs_model.js");
 const apiResponse = require("../../../utils/apiResponse.js");
 const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
 const sequeUtil = require("../../../utils/seqUtils.js");
@@ -109,6 +110,46 @@ exports.userIsEnable = [
         return apiResponse.successResponse(
           res,
           `用户状态更改成功,当前用户状态为${req.body.status ? "启用" : "禁用"}`
+        );
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];
+
+/**
+ * 查看用户操作日志
+ * @date 2023/2/18
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 获取访客记录
+ */
+exports.optlogs = [
+  tokenAuthentication,
+  async (req, res, next) => {
+    try {
+      let pm = {
+        where: {
+          operatorId: {
+            [Op.eq]: req.query.userId,
+          },
+        },
+        pageNum: req.query.pageNum,
+        pageSize: req.query.pageSize,
+        sort: {
+          prop: "createdAt",
+          order: "desc",
+        },
+      };
+      sequeUtil.list(userOptLogsModel, pm, (list) => {
+        if (list.code === 808) {
+          return apiResponse.ErrorResponse(res, "用户操作日志获取失败");
+        }
+        return apiResponse.successResponseWithData(
+          res,
+          "操作日志获取成功",
+          list.data
         );
       });
     } catch (err) {

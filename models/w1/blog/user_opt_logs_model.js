@@ -1,5 +1,6 @@
 const sequelize = require("../../../db/mysqlConnection.js");
 const { Sequelize, DataTypes } = require("sequelize");
+const userModel = require("./user_model.js");
 
 let userOptLogsModel = sequelize.define(
   "users_opt_logs",
@@ -12,7 +13,8 @@ let userOptLogsModel = sequelize.define(
       comment: "操作ID",
     },
     operatorId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
+      notNull: true,
       comment: "操作人ID",
     },
     operator: {
