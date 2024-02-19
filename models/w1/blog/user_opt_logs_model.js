@@ -41,6 +41,11 @@ let userOptLogsModel = sequelize.define(
       type: DataTypes.STRING,
       comment: "操作内容",
     },
+    status: {
+      type: DataTypes.BOOLEAN,
+      comment: "是否隐藏(0是隐藏,1是展示)",
+      defaultValue: 1,
+    },
   },
   {
     // 启动时间，设置为ture会自动生成创建和更新时间，默认字段名称为createdAt、updatedAt。

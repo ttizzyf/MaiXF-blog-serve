@@ -160,9 +160,9 @@ module.exports = {
    * @param  {Function} cb          回调函数
    */
   update: (model, obj, key, cb) => {
-    /*key={
-            id:body.id
-        }*/
+    /* key={
+         id:body.id
+       }*/
     model
       .update(obj, { where: key })
       .then((data) => {

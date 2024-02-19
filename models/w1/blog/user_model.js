@@ -11,6 +11,11 @@ let userModel = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       comment: "用户ID",
     },
+    roleId: {
+      type: Sequelize.UUID,
+      notNull: true,
+      comment: "用户角色",
+    },
     avatar: {
       type: DataTypes.STRING,
       allowNull: false,

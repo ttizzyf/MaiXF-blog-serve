@@ -4,6 +4,7 @@ const Op = sequelize.Op;
 const jwt = require("jsonwebtoken");
 const { body, validationResult, query } = require("express-validator");
 const userModel = require("../../../models/w1/blog/user_model.js");
+const permissionsModel = require("../../../models/w1/blog/permissions_model");
 const apiResponse = require("../../../utils/apiResponse.js");
 const {
   getPublicIP,
@@ -12,6 +13,7 @@ const {
   encryption,
   parseIP,
   decryption,
+  modelData,
 } = require("../../../utils/otherUtils.js");
 const sendEmail = require("../../../utils/sendEmail.js");
 const { info, error } = require("../../../utils/logger.js");
@@ -19,8 +21,10 @@ const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
 const {
   uploadMiddleware,
 } = require("../../../middlewares/uploadMiddleware.js");
+const rolesModel = require("../../../models/w1/blog/roles_model.js");
 const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
 const svgCaptcha = require("svg-captcha");
+const sequeUtil = require("../../../utils/seqUtils");
 const fs = require("fs");
 const path = require("path");
 const marked = require("marked");
@@ -101,6 +105,8 @@ exports.register = [
         website: req.body.website,
         platform: equipment,
         userIp: clientIP,
+        // 默认为访客权限
+        roleId: "c4ac5f86-c6c5-4367-959b-4498d55f45f2",
         address,
       };
       const addInfo = userModel.create(newUser);
@@ -195,40 +201,63 @@ exports.login = [
       if (code !== req.body.code) {
         return apiResponse.validationErrorWithData(res, "验证码错误");
       }
-      const userData = await userModel.findOne({
-        where: { email: req.body.email },
-      });
-      console.log(chalk.bold.green(userData));
-      if (!userData) {
-        return apiResponse.validationErrorWithData(res, "用户名或密码错误");
-      }
-      const pass = await decryption(req.body.password, userData.password);
-      console.log(pass);
-      if (!pass) {
-        return apiResponse.validationErrorWithData(res, "用户名或密码错误");
-      }
-      if (!userData.status) {
-        return apiResponse.validationErrorWithData(
-          res,
-          "当前账户已被禁用,请与管理员联系"
-        );
-      }
-      let userInfo = {
-        userId: userData.userId,
-        email: userData.email,
-        nickname: userData.nickname,
-        status: userData.status,
-        avatar: userData.avatar,
-        website: userData.website,
-        platform: userData.platform,
-      };
-      userInfo.token =
-        "Bearer " +
-        jwt.sign(userInfo, process.env.SIGN_KEY, {
-          expiresIn: 3600 * 24 * 3, //过期时间为3天
-        });
-      info(`昵称为${userInfo.nickname}的用户 登录成功`);
-      return apiResponse.successResponseWithData(res, "登录成功", userInfo);
+      sequeUtil.findOne(
+        userModel,
+        {
+          where: {
+            email: req.body.email,
+          },
+          include: [
+            {
+              model: rolesModel,
+              attributes: ["roleAuth", "roleName", "perms", "remark"], // 指定要返回的用户字段
+              as: "roleInfo",
+            },
+          ],
+          raw: true,
+        },
+        async (userData) => {
+          let newData = modelData([userData.data], "roleInfo", "roleInfo");
+          userData.data = newData[0];
+          console.log(userData.data.roleInfo.perms.split("、"));
+
+          if (userData.code === 808) {
+            return apiResponse.validationErrorWithData(res, "用户名或密码错误");
+          }
+          const pass = await decryption(
+            req.body.password,
+            userData.data.password
+          );
+          if (!pass) {
+            return apiResponse.validationErrorWithData(res, "用户名或密码错误");
+          }
+          if (!userData.data.status) {
+            return apiResponse.validationErrorWithData(
+              res,
+              "当前账户已被禁用,请与管理员联系"
+            );
+          }
+          let userId = userData.data.userId;
+          console.log(userId);
+          let userInfo = {
+            userId: userData.data.userId,
+            email: userData.data.email,
+            nickname: userData.data.nickname,
+            status: userData.data.status,
+            avatar: userData.data.avatar,
+            website: userData.data.website,
+            platform: userData.data.platform,
+            roleInfo: userData.data.roleInfo,
+          };
+          userInfo.token =
+            "Bearer " +
+            jwt.sign(userInfo, process.env.SIGN_KEY, {
+              expiresIn: 3600 * 24 * 3, //过期时间为3天
+            });
+          info(`昵称为${userInfo.nickname}的用户 登录成功`);
+          return apiResponse.successResponseWithData(res, "登录成功", userInfo);
+        }
+      );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }

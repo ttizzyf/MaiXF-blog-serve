@@ -23,4 +23,14 @@ const operate = require("../../../controllers/w1/manage/operate.js");
  */
 router.get("/list", operate.userOptlogsList);
 
+/**
+ * 获取操作列表
+ * @route GET /w1/manage/operate/list
+ * @group 博文相关 - 博文评论相关接口
+ * @param {Array} deteleList 删除元素数组
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.post("/deteleList", operate.deleteOptlogsList);
+
 module.exports = router;

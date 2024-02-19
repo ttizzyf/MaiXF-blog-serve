@@ -3,10 +3,11 @@ const sequelize = require("sequelize");
 const Op = sequelize.Op;
 const userModel = require("../../../models/w1/blog/user_model.js");
 const userOptLogsModel = require("../../../models/w1/blog/user_opt_logs_model.js");
+const rolesModel = require("../../../models/w1/blog/roles_model.js");
 const apiResponse = require("../../../utils/apiResponse.js");
 const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
 const sequeUtil = require("../../../utils/seqUtils.js");
-const { encryption } = require("../../../utils/otherUtils.js");
+const { encryption, modelData } = require("../../../utils/otherUtils.js");
 const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
 
 /**
@@ -29,6 +30,13 @@ exports.userList = [
         email,
         nickname,
         attributes: { exclude: ["password"] },
+        include: [
+          {
+            model: rolesModel,
+            attributes: ["roleAuth", "roleName", "perms", "remark"], // 指定要返回的用户字段
+            as: "roleInfo",
+          },
+        ],
         where: {},
       };
       pm.nickname
@@ -36,6 +44,9 @@ exports.userList = [
         : "";
       pm.email ? (pm.where.email = { [Op.like]: `%${pm.email}%` }) : "";
       sequeUtil.list(userModel, pm, (list) => {
+        console.log(list);
+        let newData = modelData(list.data.data, "roleInfo", "roleInfo");
+        list.data.data = newData;
         if (list.code === 808) {
           return apiResponse.ErrorResponse(res, "创建失败");
         }
