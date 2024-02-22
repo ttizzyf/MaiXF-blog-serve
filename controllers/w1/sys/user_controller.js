@@ -219,8 +219,21 @@ exports.login = [
         async (userData) => {
           let newData = modelData([userData.data], "roleInfo", "roleInfo");
           userData.data = newData[0];
-          console.log(userData.data.roleInfo.perms.split("、"));
-
+          // 权限查询
+          let peresPm = {
+            where: {
+              permissionId: {
+                [Op.in]: userData.data.roleInfo.perms.split("、"),
+              },
+            },
+            attributes: ["key"],
+            raw: true,
+          };
+          const peresData = await permissionsModel.findAll(peresPm);
+          let peresNewList = peresData.map((item) => {
+            return item.key;
+          });
+          userData.data.roleInfo.perms = peresNewList;
           if (userData.code === 808) {
             return apiResponse.validationErrorWithData(res, "用户名或密码错误");
           }

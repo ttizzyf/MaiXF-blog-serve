@@ -27,13 +27,13 @@ let permissionsModel = sequelize.define(
     auth: {
       type: DataTypes.BOOLEAN,
       defaultValue: 0,
-      comment: "是否隐藏(0是否,1是)",
+      comment: "是否按钮权限(0是否,1是)",
     },
     status: {
       type: DataTypes.BOOLEAN,
       notNull: true,
       defaultValue: 1,
-      comment: "状态: 0禁用 1正常",
+      comment: "状态: 0删除 1展示",
     },
     disabled: {
       type: DataTypes.BOOLEAN,

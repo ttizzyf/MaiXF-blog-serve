@@ -198,3 +198,54 @@ exports.modelData = (list, str, arrName) => {
   });
   return newList;
 };
+
+/**
+ * 转为树状结构
+ * @date 2024/2/22
+ * @param { Array } list 扁平数据结构
+ * @returns { Array } 树状数据结构
+ */
+
+exports.toTree = (list) => {
+  const tree = [];
+  const map = {};
+  list.forEach((permission) => {
+    map[permission.key] = { ...permission };
+  });
+  list.forEach((permission) => {
+    const parent = map[permission.parent_key];
+    if (parent) {
+      if (!parent.children) {
+        parent.children = [];
+      }
+      parent.children.push(map[permission.key]);
+    } else {
+      tree.push(map[permission.key]);
+    }
+  });
+  return tree;
+};
+
+/**
+ * 转为扁平结构
+ * @date 2024/2/22
+ * @param { Array } list 树状数据结构
+ * @returns { Array } 扁平数据结构
+ */
+exports.toFlat = (list) => {
+  const flat = [];
+
+  const flatten = (permission, parentKey = null) => {
+    const flatPermission = { ...permission, parentKey };
+    flat.push(flatPermission);
+
+    permission.children.forEach((child) => {
+      flatten(child, permission.key);
+    });
+  };
+  list.forEach((permission) => {
+    flatten(permission);
+  });
+
+  return flat;
+};
