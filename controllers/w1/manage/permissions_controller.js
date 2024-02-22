@@ -1,16 +1,10 @@
 const sequelize = require("sequelize");
 // 模糊匹配
 const Op = sequelize.Op;
-const jwt = require("jsonwebtoken");
-const { body, validationResult, query } = require("express-validator");
-const userModel = require("../../../models/w1/blog/user_model.js");
 const permissionsModel = require("../../../models/w1/blog/permissions_model");
 const apiResponse = require("../../../utils/apiResponse.js");
 const { deleteNullObj, toTree } = require("../../../utils/otherUtils.js");
 const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
-const {
-  uploadMiddleware,
-} = require("../../../middlewares/uploadMiddleware.js");
 const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
 const sequeUtil = require("../../../utils/seqUtils");
 
@@ -30,21 +24,29 @@ exports.permissionsList = [
         where: {
           status: 1,
         },
-        pageSize,
-        pageNum,
         remark,
         sort: {
           prop: "createdAt",
           order: "desc",
         },
+        raw: true,
       };
       pm.remark ? (pm.where.remark = { [Op.substring]: `%${pm.remark}%` }) : "";
       console.log(pm);
-      sequeUtil.list(permissionsModel, pm, (list) => {
-        let treeData = toTree(list.data.data);
-        list.data.data = treeData;
-        return apiResponse.successResponseWithData(res, "请求成功", list.data);
+      permissionsModel.findAndCountAll(pm).then((list) => {
+        let treeData = toTree(list.rows);
+        list.rows = treeData;
+        return apiResponse.successResponseWithData(
+          res,
+          "请求成功",
+          list.rows.length > 0 ? list : []
+        );
       });
+      // sequeUtil.list(permissionsModel, pm, (list) => {
+      //  ;
+      //   list.data.data = treeData;
+
+      // });
     } catch (err) {
       next(err);
     }

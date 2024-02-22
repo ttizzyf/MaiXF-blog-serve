@@ -45,7 +45,7 @@ router.post("/likeOrOppose", blog_comment_controller.client_blog_likeOrOppose);
 router.post("/create", blog_comment_controller.client_blog_comment_create);
 
 /**
- * 新增文章评论或留言
+ * 更新文章评论或留言
  * @route POST /w1/blog/blog_comment/update
  * @group 博文相关 - 博文评论相关接口
  * @param {string} messageId 消息id
@@ -66,5 +66,21 @@ router.post("/update", blog_comment_controller.client_blog_comment_update);
  * @returns {Error}  default - Unexpected error
  */
 router.post("/delete", blog_comment_controller.client_blog_comment_delete);
+
+/**
+ * 获取留言列表
+ * @route POST /w1/blog/manage_message/list
+ * @group 博文相关 - 留言相关接口
+ * @param {string} pageNum 当前页码
+ * @param {string} pageSize 页面大小
+ * @param {string} comment 博客名称
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+
+router.get(
+  "/Messagelist",
+  blog_comment_controller.client_blog_manage_MessageList
+);
 
 module.exports = router;

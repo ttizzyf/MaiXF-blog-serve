@@ -20,7 +20,7 @@ let rolesModel = sequelize.define(
     roleName: {
       type: DataTypes.STRING,
       notNull: true,
-      comment: "角色标识",
+      comment: "角色名称",
     },
     perms: {
       type: DataTypes.TEXT,

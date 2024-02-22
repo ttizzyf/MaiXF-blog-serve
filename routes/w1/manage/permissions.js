@@ -6,14 +6,14 @@
 
 const express = require("express");
 const router = express.Router();
-const permissions = require("../../../controllers/w1/sys/permissions_controller.js");
+const permissions = require("../../../controllers/w1/manage/permissions_controller");
 
 /**
  * 获取权限列表
- * @route GET /w1/sys/permissions/list
+ * @route GET /w1/manage/permissions/list
  * @group 权限验证 - 登录注册相关
- * @param {string} pageSize 邮箱
- * @param {string} pageNum 密码
+ * @param {string} pageSize 页面大小
+ * @param {string} pageNum 当前页码
  * @param {string} remark 备注
  * @returns {object} 200 - {"status": 1,"message": "登录成功.","data": {...},"time": 1680598858753}
  * @returns {Error}  default - Unexpected error
@@ -22,7 +22,7 @@ router.get("/list", permissions.permissionsList);
 
 /**
  * 新增权限
- * @route POST /w1/sys/permissions/create
+ * @route POST /w1/manage/permissions/create
  * @group 权限验证 - 登录注册相关
  * @param {string} remark 备注
  * @param {string} key 权限键
@@ -35,7 +35,7 @@ router.post("/create", permissions.newCreatePermissions);
 
 /**
  * 修改权限
- * @route POST /w1/sys/permissions/update
+ * @route POST /w1/manage/permissions/update
  * @group 权限验证 - 登录注册相关
  * @param {string} permissionId 权限ID
  * @param {string} remark 备注
