@@ -7,6 +7,9 @@ const {
 const chalk = require("chalk");
 const fs = require("fs");
 const path = require("path");
+const {
+  checkApiPermission,
+} = require("../../../middlewares/checkPermissionsMiddleware");
 
 /**
  * 用户上传接口
@@ -17,6 +20,7 @@ const path = require("path");
 
 exports.upload = [
   tokenAuthentication,
+  checkApiPermission("common:upload"),
   actionRecords({ module: "上传文件" }),
   uploadFileMiddleware("uploads/"),
   async (req, res) => {

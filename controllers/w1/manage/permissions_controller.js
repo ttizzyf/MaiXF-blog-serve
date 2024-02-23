@@ -5,6 +5,9 @@ const permissionsModel = require("../../../models/w1/blog/permissions_model");
 const apiResponse = require("../../../utils/apiResponse.js");
 const { deleteNullObj, toTree } = require("../../../utils/otherUtils.js");
 const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
+const {
+  checkApiPermission,
+} = require("../../../middlewares/checkPermissionsMiddleware");
 const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
 const sequeUtil = require("../../../utils/seqUtils");
 
@@ -17,9 +20,10 @@ const sequeUtil = require("../../../utils/seqUtils");
 
 exports.permissionsList = [
   tokenAuthentication,
+  checkApiPermission("manage:permissions:list"),
   async (req, res, next) => {
     try {
-      const { pageSize, pageNum, remark } = req.query;
+      const { remark } = req.query;
       let pm = {
         where: {
           status: 1,
@@ -61,6 +65,7 @@ exports.permissionsList = [
  */
 exports.newCreatePermissions = [
   tokenAuthentication,
+  checkApiPermission("manage:permissions:create"),
   actionRecords({ module: "新增权限词条" }),
   async (req, res, next) => {
     try {
@@ -85,6 +90,7 @@ exports.newCreatePermissions = [
  */
 exports.updatePermisssions = [
   tokenAuthentication,
+  checkApiPermission("manage:permissions:update"),
   actionRecords({ module: "新增权限词条" }),
   async (req, res, next) => {
     try {

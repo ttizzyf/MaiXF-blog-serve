@@ -9,6 +9,9 @@ const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js
 const sequeUtil = require("../../../utils/seqUtils.js");
 const { encryption, modelData } = require("../../../utils/otherUtils.js");
 const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
+const {
+  checkApiPermission,
+} = require("../../../middlewares/checkPermissionsMiddleware.js");
 
 /**
  * 获取用户列表
@@ -20,6 +23,7 @@ const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
 
 exports.userList = [
   tokenAuthentication,
+  checkApiPermission("manage:user:list"),
   async (req, res, next) => {
     try {
       console.log(req.query);
@@ -71,6 +75,7 @@ exports.userList = [
  */
 exports.resetPassword = [
   tokenAuthentication,
+  checkApiPermission("manage:user:resetPassword"),
   actionRecords({ module: "用户密码重置" }),
   async (req, res, next) => {
     try {
@@ -105,6 +110,7 @@ exports.resetPassword = [
  */
 exports.userIsEnable = [
   tokenAuthentication,
+  checkApiPermission("manage:user:userIsEnable"),
   actionRecords({ module: "是否启用账户" }),
   async (req, res, next) => {
     try {
@@ -138,6 +144,7 @@ exports.userIsEnable = [
  */
 exports.optlogs = [
   tokenAuthentication,
+  checkApiPermission("manage:user:optlogs"),
   async (req, res, next) => {
     try {
       let pm = {

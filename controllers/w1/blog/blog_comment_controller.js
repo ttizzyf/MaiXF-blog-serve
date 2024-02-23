@@ -13,6 +13,9 @@ const { deleteNullObj } = require("../../../utils/otherUtils.js");
 const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
+const {
+  checkApiPermission,
+} = require("../../../middlewares/checkPermissionsMiddleware");
 
 /**
  * 获取文章评论接口
@@ -23,6 +26,7 @@ const chalk = require("chalk");
  */
 exports.client_blog_commentList = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_comment:list"),
   async (req, res) => {
     try {
       let pm = req.query;
@@ -116,6 +120,7 @@ exports.client_blog_commentList = [
  */
 exports.client_blog_likeOrOppose = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_comment:likeOrOppose"),
   async (req, res, next) => {
     try {
       console.log(req.body.id);
@@ -160,6 +165,7 @@ exports.client_blog_likeOrOppose = [
  */
 exports.client_blog_comment_create = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_comment:create"),
   actionRecords({ module: "新增留言或评论" }),
   async (req, res, next) => {
     try {
@@ -187,6 +193,7 @@ exports.client_blog_comment_create = [
  */
 exports.client_blog_comment_update = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_comment:update"),
   actionRecords({ module: "修改留言或评论" }),
   async (req, res, next) => {
     try {
@@ -235,6 +242,7 @@ exports.client_blog_comment_update = [
  */
 exports.client_blog_comment_delete = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_comment:delete"),
   actionRecords({ module: "删除留言或评论" }),
   async (req, res, next) => {
     try {
@@ -267,6 +275,7 @@ exports.client_blog_comment_delete = [
  */
 exports.client_blog_manage_MessageList = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_comment:Messagelist"),
   async (req, res, next) => {
     try {
       let pm = req.query;

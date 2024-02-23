@@ -20,6 +20,9 @@ const fs = require("fs");
 const path = require("path");
 const marked = require("marked");
 const chalk = require("chalk");
+const {
+  checkApiPermission,
+} = require("../../../middlewares/checkPermissionsMiddleware");
 
 let objStr = "userInfo";
 
@@ -40,6 +43,7 @@ userModel.hasMany(blogArticleModel, { foreignKey: "userId", as: "article" });
 
 exports.client_blog_articleList = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_article:list"),
   async (req, res, next) => {
     try {
       let {
@@ -110,6 +114,7 @@ exports.client_blog_articleList = [
 
 exports.blog_article_update = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_article:update"),
   async (req, res, next) => {
     try {
       let pm = req.body;
@@ -137,6 +142,7 @@ exports.blog_article_update = [
 
 exports.get_article_details = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_article:details"),
   async (req, res, next) => {
     try {
       let pm = {};
@@ -167,6 +173,7 @@ exports.get_article_details = [
  */
 exports.upload_article_md = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_article:uploadArticleMd"),
   uploadFileMiddleware("uploads/"),
   async (req, res) => {
     try {
@@ -224,6 +231,7 @@ exports.upload_article_md = [
  */
 exports.delete_article = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_article:delete"),
   actionRecords({ module: "删除博文" }),
   async (req, res) => {
     try {
@@ -251,6 +259,7 @@ exports.delete_article = [
 
 exports.new_create_article = [
   tokenAuthentication,
+  checkApiPermission("blog:blog_article:create"),
   actionRecords({ module: "新建博文" }),
   async (req, res) => {
     try {
@@ -273,6 +282,8 @@ exports.new_create_article = [
  * @returns {Object} - 包含博文列表展示
  */
 exports.get_blog_select_list = [
+  tokenAuthentication,
+  checkApiPermission("blog:blog_article:selectList"),
   async (req, res, next) => {
     try {
       let pm = {

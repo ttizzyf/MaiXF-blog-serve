@@ -30,6 +30,9 @@ const path = require("path");
 const marked = require("marked");
 const chalk = require("chalk");
 const UAParser = require("ua-parser-js");
+const {
+  checkApiPermission,
+} = require("../../../middlewares/checkPermissionsMiddleware");
 
 /**
  * 用户注册接口
@@ -217,6 +220,7 @@ exports.login = [
           raw: true,
         },
         async (userData) => {
+          console.log(userData.data["roleInfo.roleAuth"]);
           let newData = modelData([userData.data], "roleInfo", "roleInfo");
           userData.data = newData[0];
           // 权限查询
@@ -313,6 +317,7 @@ exports.captcha = [
 
 exports.emitUser = [
   tokenAuthentication,
+  checkApiPermission("sys:auth:emitUser"),
   actionRecords({ module: "修改用户信息" }),
   async (req, res) => {
     try {

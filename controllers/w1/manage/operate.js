@@ -6,7 +6,9 @@ const sequeUtil = require("../../../utils/seqUtils.js");
 const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
 const apiResponse = require("../../../utils/apiResponse.js");
 const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
-
+const {
+  checkApiPermission,
+} = require("../../../middlewares/checkPermissionsMiddleware");
 /**
  * 获取操作记录列表
  * @date 2023/2/19
@@ -16,6 +18,7 @@ const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
  */
 exports.userOptlogsList = [
   tokenAuthentication,
+  checkApiPermission("manage:operate:list"),
   async (req, res, next) => {
     try {
       let { pageNum, pageSize, nickname, module, platform, operatorIP } =
@@ -57,6 +60,7 @@ exports.userOptlogsList = [
  */
 exports.deleteOptlogsList = [
   tokenAuthentication,
+  checkApiPermission("manage:operate:deteleList"),
   async (req, res, next) => {
     try {
       let obj = req.body.map((item) => {
