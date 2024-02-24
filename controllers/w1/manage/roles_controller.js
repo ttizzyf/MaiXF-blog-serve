@@ -21,7 +21,6 @@ const sequeUtil = require("../../../utils/seqUtils");
  */
 exports.rolesList = [
   tokenAuthentication,
-  // checkApiPermission("manage:roles:list"),
   async (req, res, next) => {
     try {
       console.log(req.query);
@@ -193,7 +192,6 @@ exports.deleteRoles = [
  */
 exports.rolesPerms = [
   tokenAuthentication,
-  checkApiPermission("manage:roles:rolesPerms"),
   async (req, res, next) => {
     try {
       let pm = {

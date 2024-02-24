@@ -220,6 +220,13 @@ exports.login = [
           raw: true,
         },
         async (userData) => {
+          console.log(userData);
+          if (!userData.data.status) {
+            return apiResponse.ErrorResponse(
+              res,
+              "当前账户已被禁用,请与管理员联系"
+            );
+          }
           console.log(userData.data["roleInfo.roleAuth"]);
           let newData = modelData([userData.data], "roleInfo", "roleInfo");
           userData.data = newData[0];

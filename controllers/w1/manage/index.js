@@ -22,7 +22,6 @@ const {
 
 exports.browsing = [
   tokenAuthentication,
-  checkApiPermission("manage:home:browsing"),
   async (req, res) => {
     try {
       const today = getFullTimesTamps(new Date());
@@ -126,7 +125,6 @@ const formatData = (days, list) => {
 
 exports.weekVistorAndRegister = [
   tokenAuthentication,
-  checkApiPermission("manage:home:weekVistorAndRegister"),
   async (req, res, next) => {
     try {
       const today = getFullTimesTamps(new Date());
@@ -192,7 +190,6 @@ exports.weekVistorAndRegister = [
 
 exports.visitorBrowserType = [
   tokenAuthentication,
-  checkApiPermission("manage:home:visitorBrowserType"),
   async (req, res, next) => {
     try {
       // 定义平台类型
@@ -269,7 +266,6 @@ exports.visitorBrowserType = [
  */
 exports.registerList = [
   tokenAuthentication,
-  checkApiPermission("manage:home:registerList"),
   async (req, res, next) => {
     try {
       let pm = req.query;

@@ -18,7 +18,6 @@ const {
  */
 exports.userOptlogsList = [
   tokenAuthentication,
-  checkApiPermission("manage:operate:list"),
   async (req, res, next) => {
     try {
       let { pageNum, pageSize, nickname, module, platform, operatorIP } =

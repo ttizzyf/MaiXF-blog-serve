@@ -23,7 +23,6 @@ const {
 
 exports.userList = [
   tokenAuthentication,
-  checkApiPermission("manage:user:list"),
   async (req, res, next) => {
     try {
       console.log(req.query);
@@ -144,7 +143,6 @@ exports.userIsEnable = [
  */
 exports.optlogs = [
   tokenAuthentication,
-  checkApiPermission("manage:user:optlogs"),
   async (req, res, next) => {
     try {
       let pm = {

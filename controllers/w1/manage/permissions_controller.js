@@ -20,7 +20,6 @@ const sequeUtil = require("../../../utils/seqUtils");
 
 exports.permissionsList = [
   tokenAuthentication,
-  checkApiPermission("manage:permissions:list"),
   async (req, res, next) => {
     try {
       const { remark } = req.query;

@@ -43,7 +43,6 @@ userModel.hasMany(blogArticleModel, { foreignKey: "userId", as: "article" });
 
 exports.client_blog_articleList = [
   tokenAuthentication,
-  checkApiPermission("blog:blog_article:list"),
   async (req, res, next) => {
     try {
       let {
@@ -142,7 +141,6 @@ exports.blog_article_update = [
 
 exports.get_article_details = [
   tokenAuthentication,
-  checkApiPermission("blog:blog_article:details"),
   async (req, res, next) => {
     try {
       let pm = {};
@@ -283,7 +281,6 @@ exports.new_create_article = [
  */
 exports.get_blog_select_list = [
   tokenAuthentication,
-  checkApiPermission("blog:blog_article:selectList"),
   async (req, res, next) => {
     try {
       let pm = {

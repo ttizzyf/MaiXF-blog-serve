@@ -26,7 +26,6 @@ const {
  */
 exports.client_blog_commentList = [
   tokenAuthentication,
-  checkApiPermission("blog:blog_comment:list"),
   async (req, res) => {
     try {
       let pm = req.query;
@@ -120,7 +119,6 @@ exports.client_blog_commentList = [
  */
 exports.client_blog_likeOrOppose = [
   tokenAuthentication,
-  checkApiPermission("blog:blog_comment:likeOrOppose"),
   async (req, res, next) => {
     try {
       console.log(req.body.id);
@@ -165,7 +163,6 @@ exports.client_blog_likeOrOppose = [
  */
 exports.client_blog_comment_create = [
   tokenAuthentication,
-  checkApiPermission("blog:blog_comment:create"),
   actionRecords({ module: "新增留言或评论" }),
   async (req, res, next) => {
     try {
@@ -275,7 +272,6 @@ exports.client_blog_comment_delete = [
  */
 exports.client_blog_manage_MessageList = [
   tokenAuthentication,
-  checkApiPermission("blog:blog_comment:Messagelist"),
   async (req, res, next) => {
     try {
       let pm = req.query;
