@@ -4,6 +4,7 @@ const Op = sequelize.Op;
 const { body, validationResult } = require("express-validator");
 const blogArticleModel = require("../../../models/w1/blog/blog_article_model.js");
 const userModel = require("../../../models/w1/blog/user_model.js");
+const messageModel = require("../../../models/w1/blog/message_model.js");
 const apiResponse = require("../../../utils/apiResponse.js");
 const {
   getPublicIP,
@@ -42,7 +43,6 @@ userModel.hasMany(blogArticleModel, { foreignKey: "userId", as: "article" });
  */
 
 exports.client_blog_articleList = [
-  tokenAuthentication,
   async (req, res, next) => {
     try {
       let {
@@ -76,6 +76,7 @@ exports.client_blog_articleList = [
           "recommended",
           "isReship",
           "createdAt",
+          "abstract",
         ],
         include: [
           {
@@ -92,9 +93,42 @@ exports.client_blog_articleList = [
       pm.where.title
         ? (pm.where.title = { [Op.substring]: `%${pm.where.title}%` })
         : (pm.where.title = "");
-      seqUtils.list(blogArticleModel, pm, (list) => {
+      seqUtils.list(blogArticleModel, pm, async (list) => {
         let newList = modelData(list.data.data, objStr, objStr);
         list.data.data = newList;
+        let messagePromises = [];
+        list.data.data.forEach((item, index) => {
+          let messagePm = {
+            where: {
+              relatedArticleId: item.id,
+              hidden: 1,
+            },
+            raw: true,
+          };
+          messagePromises.push(
+            messageModel.findAndCountAll(messagePm).then((message) => {
+              // 统计评论总数
+              return message.count;
+            })
+          );
+        });
+        await Promise.all(messagePromises).then((data) => {
+          list.data.data.forEach((item, index) => {
+            item["messageNum"] = data[index];
+          });
+        });
+        return apiResponse.successResponseWithData(res, "success", list.data);
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];
+/**
+ * 后台获取博文列表
+ * @date 2023/12/11
+ * @param {Object} req - 请求对象，包含查询参数
+        }
         return apiResponse.successResponseWithData(res, "success", list.data);
       });
     } catch (err) {
