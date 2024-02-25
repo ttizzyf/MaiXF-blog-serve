@@ -272,6 +272,8 @@ exports.login = [
             website: userData.data.website,
             platform: userData.data.platform,
             roleInfo: userData.data.roleInfo,
+            address: userData.data.address,
+            userIp: userData.data.address,
           };
           userInfo.token =
             "Bearer " +

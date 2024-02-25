@@ -4,7 +4,7 @@ const chalk = require("chalk");
 
 const redisClient = redis
   .createClient({
-    url: "redis://120.55.46.157:6379",
+    url: `redis://${REDIS_CONF.host}:${REDIS_CONF.port}`,
   })
   .connect(() => {
     console.log(chalk.bold.green("----------REDIS连接成功------------"));
