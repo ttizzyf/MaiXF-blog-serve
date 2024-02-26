@@ -25,7 +25,6 @@ const {
  * @returns {Object} - 包含博文列表展示
  */
 exports.client_blog_commentList = [
-  tokenAuthentication,
   async (req, res) => {
     try {
       let pm = req.query;
@@ -162,7 +161,6 @@ exports.client_blog_likeOrOppose = [
  * @returns {Object} - 包含博文列表展示
  */
 exports.client_blog_comment_create = [
-  tokenAuthentication,
   actionRecords({ module: "新增留言或评论" }),
   async (req, res, next) => {
     try {
@@ -271,7 +269,6 @@ exports.client_blog_comment_delete = [
  * @returns {Object} - 包含博文列表展示
  */
 exports.client_blog_manage_MessageList = [
-  tokenAuthentication,
   async (req, res, next) => {
     try {
       let pm = req.query;
