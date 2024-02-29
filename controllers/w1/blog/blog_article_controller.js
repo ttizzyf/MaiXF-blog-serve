@@ -174,7 +174,6 @@ exports.blog_article_update = [
  */
 
 exports.get_article_details = [
-  tokenAuthentication,
   async (req, res, next) => {
     try {
       let pm = {};
