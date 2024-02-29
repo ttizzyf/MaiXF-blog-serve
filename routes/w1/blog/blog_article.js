@@ -95,4 +95,13 @@ router.post("/delete", blog_article_controller.delete_article);
  */
 router.get("/selectList", blog_article_controller.get_blog_select_list);
 
+/**
+ * 浏览文章
+ * @route POST /w1/blog/blog_article/viewArticle
+ * @group 博文相关 - 博文管理相关接口
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.get("/viewArticle", blog_article_controller.view_blog_article);
+
 module.exports = router;

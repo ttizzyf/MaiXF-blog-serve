@@ -176,9 +176,20 @@ exports.blog_article_update = [
 exports.get_article_details = [
   async (req, res, next) => {
     try {
-      let pm = {};
-      pm.where = req.body;
+      let pm = {
+        where: req.body,
+        include: [
+          {
+            model: userModel,
+            attributes: ["userId", "nickname", "email"], // 指定要返回的用户字段
+            as: "userInfo",
+          },
+        ],
+      };
       seqUtils.findOne(blogArticleModel, pm, (data) => {
+        console.log(data);
+        let newList = modelData([data.data], "userInfo", "userInfo");
+        data.data = newList[0];
         if (data.code === 200) {
           return apiResponse.successResponseWithData(
             res,
@@ -322,6 +333,43 @@ exports.get_blog_select_list = [
       };
       blogArticleModel.findAll(pm).then((list) => {
         return apiResponse.successResponseWithData(res, "获取成功", list);
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];
+
+/**
+ * 浏览文章
+ * @date 2023/2/29
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+exports.view_blog_article = [
+  async (req, res, next) => {
+    try {
+      let pm = {
+        where: { id: req.query.id },
+        attributes: ["viewNum"],
+      };
+      seqUtils.findOne(blogArticleModel, pm, (data) => {
+        if (data.code === 808) {
+          return apiResponse.ErrorResponse(res, data.message);
+        }
+        let newViewNum = data.data.viewNum + 1;
+        seqUtils.update(
+          blogArticleModel,
+          { viewNum: newViewNum },
+          { id: req.query.id },
+          (end) => {
+            if (end.code === 808) {
+              return apiResponse.ErrorResponse(res, end.message);
+            }
+            return apiResponse.successResponse(res, "记录成功");
+          }
+        );
       });
     } catch (err) {
       next(err);
