@@ -58,9 +58,7 @@ exports.client_blog_commentList = [
         prop: "createdAt",
         order: "desc",
       };
-      console.log(pm);
       seqUtils.list(messageModel, pm, async (list) => {
-        console.log(list);
         let newList = modelData(list.data.data, "userInfo", "userInfo");
         let newArticle = modelData(newList, "articleInfo", "articleInfo");
         list.data.data = newArticle;
@@ -161,6 +159,7 @@ exports.client_blog_likeOrOppose = [
  * @returns {Object} - 包含博文列表展示
  */
 exports.client_blog_comment_create = [
+  tokenAuthentication,
   actionRecords({ module: "新增留言或评论" }),
   async (req, res, next) => {
     try {

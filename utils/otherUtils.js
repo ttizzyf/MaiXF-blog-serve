@@ -206,21 +206,21 @@ exports.modelData = (list, str, arrName) => {
  * @returns { Array } 树状数据结构
  */
 
-exports.toTree = (list) => {
+exports.toTree = (list, sonKey, parentKey) => {
   const tree = [];
   const map = {};
   list.forEach((permission) => {
-    map[permission.key] = { ...permission };
+    map[permission[sonKey]] = { ...permission };
   });
   list.forEach((permission) => {
-    const parent = map[permission.parent_key];
+    const parent = map[permission[parentKey]];
     if (parent) {
       if (!parent.children) {
         parent.children = [];
       }
-      parent.children.push(map[permission.key]);
+      parent.children.push(map[permission[sonKey]]);
     } else {
-      tree.push(map[permission.key]);
+      tree.push(map[permission[sonKey]]);
     }
   });
   return tree;

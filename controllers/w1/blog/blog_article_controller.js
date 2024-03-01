@@ -10,6 +10,7 @@ const {
   getPublicIP,
   modelData,
   deleteNullObj,
+  toTree,
 } = require("../../../utils/otherUtils.js");
 const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
 const seqUtils = require("../../../utils/seqUtils.js");
@@ -124,18 +125,6 @@ exports.client_blog_articleList = [
     }
   },
 ];
-/**
- * 后台获取博文列表
- * @date 2023/12/11
- * @param {Object} req - 请求对象，包含查询参数
-        }
-        return apiResponse.successResponseWithData(res, "success", list.data);
-      });
-    } catch (err) {
-      next(err);
-    }
-  },
-];
 
 /**
  * 通过id修改获取博文
@@ -187,7 +176,6 @@ exports.get_article_details = [
         ],
       };
       seqUtils.findOne(blogArticleModel, pm, (data) => {
-        console.log(data);
         let newList = modelData([data.data], "userInfo", "userInfo");
         data.data = newList[0];
         if (data.code === 200) {
@@ -277,7 +265,6 @@ exports.delete_article = [
   actionRecords({ module: "删除博文" }),
   async (req, res) => {
     try {
-      console.log(req.user);
       seqUtils.update(blogArticleModel, { status: 0 }, req.body, (data) => {
         if (data.code === 200) {
           return apiResponse.successResponse(res, "删除成功");
@@ -369,6 +356,51 @@ exports.view_blog_article = [
             }
             return apiResponse.successResponse(res, "记录成功");
           }
+        );
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];
+
+/**
+ * 根据文章id获取评论
+ * @date 2023/3/1
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+exports.get_comments_by_articleId = [
+  async (req, res) => {
+    try {
+      let pm = {
+        where: {},
+        raw: true,
+        include: [
+          {
+            model: userModel,
+            attributes: { exclude: ["password"] },
+            as: "userInfo",
+          },
+          {
+            model: userModel,
+            attributes: { exclude: ["password"] },
+            as: "toUserInfo",
+          },
+        ],
+      };
+      pm.where = { relatedArticleId: req.query.relatedArticleId };
+      messageModel.findAndCountAll(pm).then((list) => {
+        let newList = modelData(list.rows, "userInfo", "userInfo");
+        let toUserInfo = modelData(newList, "toUserInfo", "toUserInfo");
+        list.rows = toUserInfo;
+        let treeData = toTree(list.rows, "messageId", "messagePid");
+        list.rows = treeData;
+        return apiResponse.successResponseWithData(
+          res,
+          "获取成功",
+          list.count > 0 ? list : []
         );
       });
     } catch (err) {

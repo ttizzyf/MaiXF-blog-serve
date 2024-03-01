@@ -35,9 +35,8 @@ exports.permissionsList = [
         raw: true,
       };
       pm.remark ? (pm.where.remark = { [Op.substring]: `%${pm.remark}%` }) : "";
-      console.log(pm);
       permissionsModel.findAndCountAll(pm).then((list) => {
-        let treeData = toTree(list.rows);
+        let treeData = toTree(list.rows, "key", "parent_key");
         list.rows = treeData;
         return apiResponse.successResponseWithData(
           res,

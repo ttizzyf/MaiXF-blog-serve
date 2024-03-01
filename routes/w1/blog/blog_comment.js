@@ -77,7 +77,6 @@ router.post("/delete", blog_comment_controller.client_blog_comment_delete);
  * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
  * @returns {Error}  default - Unexpected error
  */
-
 router.get(
   "/Messagelist",
   blog_comment_controller.client_blog_manage_MessageList

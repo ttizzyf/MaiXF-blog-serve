@@ -99,9 +99,22 @@ router.get("/selectList", blog_article_controller.get_blog_select_list);
  * 浏览文章
  * @route POST /w1/blog/blog_article/viewArticle
  * @group 博文相关 - 博文管理相关接口
+ * @param {Blob} id 博文id
  * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
  * @returns {Error}  default - Unexpected error
  */
 router.get("/viewArticle", blog_article_controller.view_blog_article);
+
+/**
+ * 根据文章id获取文章评论
+ * @route POST /w1/blog/manage_message/Commentslist
+ * @group 博文相关 - 留言相关接口
+ * @param {string} pageNum 当前页码
+ * @param {string} pageSize 页面大小
+ * @param {string} relatedArticleId 文章id
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.get("/Commentslist", blog_article_controller.get_comments_by_articleId);
 
 module.exports = router;
