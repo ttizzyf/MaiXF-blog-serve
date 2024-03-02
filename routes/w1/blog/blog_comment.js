@@ -14,6 +14,7 @@ const blog_comment_controller = require("../../../controllers/w1/blog/blog_comme
  * @param {string} pageNum 当前页码
  * @param {string} pageSize 页面大小
  * @param {string} comment 留言内容
+ * @param {string} messageId 留言ID
  * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
  * @returns {Error}  default - Unexpected error
  */

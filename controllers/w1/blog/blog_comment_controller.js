@@ -285,6 +285,9 @@ exports.client_blog_manage_MessageList = [
       pm.where.content
         ? (pm.where.content = { [Op.substring]: `%${pm.where.content}%` })
         : (pm.where.content = "");
+      pm.messageId
+        ? (pm.where.messageId = { [Op.eq]: `${pm.messageId}` })
+        : (pm.messageId = "");
       pm.include = [
         {
           model: userModel,
