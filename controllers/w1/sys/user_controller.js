@@ -18,16 +18,10 @@ const {
 const sendEmail = require("../../../utils/sendEmail.js");
 const { info, error } = require("../../../utils/logger.js");
 const actionRecords = require("../../../middlewares/actionLogsMiddleware.js");
-const {
-  uploadMiddleware,
-} = require("../../../middlewares/uploadMiddleware.js");
 const rolesModel = require("../../../models/w1/blog/roles_model.js");
 const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
 const svgCaptcha = require("svg-captcha");
 const sequeUtil = require("../../../utils/seqUtils");
-const fs = require("fs");
-const path = require("path");
-const marked = require("marked");
 const chalk = require("chalk");
 const UAParser = require("ua-parser-js");
 const {

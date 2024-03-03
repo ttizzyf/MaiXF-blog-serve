@@ -9,6 +9,8 @@ const sequeUtil = require("../../../utils/seqUtils");
 const {
   checkApiPermission,
 } = require("../../../middlewares/checkPermissionsMiddleware");
+const { deleteNullObj } = require("../../../utils/otherUtils");
+const tokenAuthentication = require("../../../middlewares/tokenAuthentication");
 
 /**
  * 新增用户私信
@@ -21,6 +23,15 @@ const {
 exports.createLetter = [
   async (req, res, next) => {
     try {
+      console.log(req.body);
+      let pm = req.body;
+      sequeUtil.create(letterModel, pm, (data) => {
+        // console.log(data);
+        if (data.code === 808) {
+          return apiResponse.ErrorResponse(res, "私信错误,请稍后再试");
+        }
+        return apiResponse.successResponse(res, "私信已发送");
+      });
     } catch (err) {
       next(err);
     }
@@ -36,8 +47,30 @@ exports.createLetter = [
  */
 
 exports.letterList = [
+  tokenAuthentication,
+  checkApiPermission("sys:letter:list"),
   async (req, res, next) => {
     try {
+      console.log(req.query);
+      let pm = {
+        pageSize: req.query.pageSize,
+        pageNum: req.query.pageNum,
+        where: {},
+      };
+      delete req.query.pageSize;
+      delete req.query.pageNum;
+      pm.where = deleteNullObj(req.query);
+      sequeUtil.list(letterModel, pm, (list) => {
+        console.log(list);
+        if (list.code === 808) {
+          return apiResponse.ErrorResponse(res, "私信列表获取失败");
+        }
+        return apiResponse.successResponseWithData(
+          res,
+          "私信列表获取成功",
+          list.data
+        );
+      });
     } catch (err) {
       next(err);
     }

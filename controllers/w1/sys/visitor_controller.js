@@ -10,9 +10,6 @@ const {
   visitorFindOne,
   updateVisitorCount,
 } = require("../../../utils/visitor.js");
-const chalk = require("chalk");
-const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
-const util = require("util");
 
 // 访客记录
 exports.generateVisitorRecord = [

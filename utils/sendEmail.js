@@ -3,6 +3,7 @@
  * @date 2023/12/11
  * @Description:发送邮件工具
  * TODO 使用:
+ * @param {string} type - 发送的类型(sendEmail为发送验证码,regisiter为注册成功,callback为回复留言)
  * @param {string} to - 发送邮件的目标邮箱
  * @param {string} content - 发送邮件的内容
  * @returns {Promise} - 邮件发送状况

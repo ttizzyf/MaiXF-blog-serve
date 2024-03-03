@@ -26,6 +26,10 @@ let letterModel = sequelize.define(
       defaultValue: 0,
       comment: "是否阅读(0是未读,1是已读)",
     },
+    replyContent: {
+      type: DataTypes.TEXT,
+      comment: "私信回复内容",
+    },
     isReply: {
       type: DataTypes.BOOLEAN,
       notEmpty: true,

@@ -10,6 +10,7 @@ const userModel = require("../../../models/w1/blog/user_model.js");
 const blogArticleModel = require("../../../models/w1/blog/blog_article_model.js");
 const { modelData } = require("../../../utils/otherUtils.js");
 const { deleteNullObj } = require("../../../utils/otherUtils.js");
+const { sendEmail } = require("../../../utils/sendEmail.js");
 const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
@@ -165,7 +166,19 @@ exports.client_blog_comment_create = [
     try {
       let pm = deleteNullObj(req.body);
       pm.userId = req.user.userId;
-      console.log(pm);
+      // 是否发送邮件
+      if (req.body.isSendEmail) {
+        seqUtils.findOne(
+          userModel,
+          { where: { userId: req.body.toUserId } },
+          async (toUserInfo) => {
+            if (toUserInfo.code === 808) {
+              return apiResponse.ErrorResponse(res, "回复用户不存在");
+            }
+            await sendEmail("callback", toUserInfo.data.email, pm.content);
+          }
+        );
+      }
       seqUtils.create(messageModel, pm, (data) => {
         if (data.code === 808) {
           return apiResponse.ErrorResponse(res, "创建失败");
