@@ -53,6 +53,15 @@ exports.sendEmail = (type, to, content) => {
         <p style="font-weight: bold">${content}</p>
         <p style="text-indent: 2em;">祝您工作顺利，心想事成</p>`,
       };
+    } else if (type === "replyLetter") {
+      emailOptions = {
+        from: "MaiXF.ADMIN 1374144742@qq.com",
+        to: to,
+        subject: `来自MaiXF.ADMIN的私信回复`,
+        html: `
+        <p style="font-weight: bold">${content}</p>
+        <p style="text-indent: 2em;">祝您工作顺利，心想事成</p>`,
+      };
     }
     const res = transporter.sendMail(emailOptions, function (error, info) {
       if (!error) {

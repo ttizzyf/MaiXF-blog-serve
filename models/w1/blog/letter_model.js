@@ -39,7 +39,7 @@ let letterModel = sequelize.define(
     status: {
       type: DataTypes.BOOLEAN,
       notEmpty: true,
-      defaultValue: 0,
+      defaultValue: 1,
       comment: "状态发布和草稿(0是删除,1是正常)",
     },
   },
