@@ -67,12 +67,15 @@ exports.createFriendLink = [
  */
 exports.manageFriendLink = [
   tokenAuthentication,
+  checkApiPermission("sys:friend:manageList"),
   async (req, res, next) => {
     try {
       let pm = {
         pageSize: req.query.pageSize,
         pageNum: req.query.pageNum,
-        where: {},
+        where: {
+          status: 1,
+        },
       };
       req.query.email
         ? (pm.where.email = { [Op.substring]: `${req.query.email}` })
@@ -118,6 +121,7 @@ exports.adminShowFriendLink = [
  */
 exports.updateFriendLink = [
   tokenAuthentication,
+  checkApiPermission("sys:friend:update"),
   [body("id").notEmpty().withMessage("id不能为空")],
   async (req, res, next) => {
     try {
