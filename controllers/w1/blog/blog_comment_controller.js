@@ -183,7 +183,11 @@ exports.client_blog_comment_create = [
         if (data.code === 808) {
           return apiResponse.ErrorResponse(res, "创建失败");
         }
-        return apiResponse.successResponse(res, "评论成功");
+        return apiResponse.successResponseWithData(
+          res,
+          "评论成功",
+          data.data.dataValues.messageId
+        );
       });
     } catch (err) {
       next(err);

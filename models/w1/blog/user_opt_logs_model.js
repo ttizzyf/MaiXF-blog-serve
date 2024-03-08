@@ -57,4 +57,9 @@ let userOptLogsModel = sequelize.define(
   }
 );
 
+// (async () => {
+//   await userOptLogsModel.sync({ force: true });
+//   // 这里是代码
+// })();
+
 module.exports = userOptLogsModel;

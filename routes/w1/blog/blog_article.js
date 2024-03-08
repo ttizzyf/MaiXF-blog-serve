@@ -117,4 +117,16 @@ router.get("/viewArticle", blog_article_controller.view_blog_article);
  */
 router.get("/Commentslist", blog_article_controller.get_comments_by_articleId);
 
+/**
+ * 根据文章id获取文章评论
+ * @route POST /w1/blog/manage_message/Commentslist
+ * @group 博文相关 - 留言相关接口
+ * @param {string} pageNum 当前页码
+ * @param {string} pageSize 页面大小
+ * @param {string} relatedArticleId 文章id
+ * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+router.post("/like", blog_article_controller.blog_article_like);
+
 module.exports = router;

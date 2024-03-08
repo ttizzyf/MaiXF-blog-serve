@@ -107,4 +107,9 @@ let blogArticleModel = sequelize.define(
   }
 );
 
+// (async () => {
+//   await blogArticleModel.sync({ force: true });
+//   // 这里是代码
+// })();
+
 module.exports = blogArticleModel;

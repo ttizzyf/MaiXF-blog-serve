@@ -61,11 +61,6 @@ let messageModel = sequelize.define(
   }
 );
 
-// (async () => {
-//   await messageModel.sync({ force: true });
-//   // 这里是代码
-// })();
-
 // 评论与用户是一对多的关系
 userModel.hasOne(messageModel, {
   foreignKey: "userId", // 指定外键，即评论表中关联用户的字段
@@ -92,5 +87,10 @@ blogArticleModel.hasMany(messageModel, {
   foreignKey: "relatedArticleId", // 指定外键，即评论表中关联用户的字段
   as: "messageInfo",
 });
+
+// (async () => {
+//   await messageModel.sync({ force: true });
+//   // 这里是代码
+// })();
 
 module.exports = messageModel;

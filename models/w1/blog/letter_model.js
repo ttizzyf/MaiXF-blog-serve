@@ -54,4 +54,9 @@ let letterModel = sequelize.define(
   }
 );
 
+// (async () => {
+//   await letterModel.sync({ force: true });
+//   // 这里是代码
+// })();
+
 module.exports = letterModel;

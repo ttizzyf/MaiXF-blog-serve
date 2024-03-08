@@ -106,6 +106,19 @@ exports.manageFriendLink = [
 exports.adminShowFriendLink = [
   async (req, res, next) => {
     try {
+      let pm = {
+        where: {
+          status: 1,
+          isShow: 1,
+        },
+        order: [["createdAt", "DESC"]],
+        attributes: { exclude: ["email"] },
+        raw: true,
+      };
+      friendLinkModel.findAndCountAll(pm).then((list) => {
+        console.log(list);
+        return apiResponse.successResponseWithData(res, "请求成功", list);
+      });
     } catch (err) {
       next(err);
     }

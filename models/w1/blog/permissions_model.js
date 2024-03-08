@@ -52,4 +52,9 @@ let permissionsModel = sequelize.define(
   }
 );
 
+// (async () => {
+//   await permissionsModel.sync({ force: true });
+//   // 这里是代码
+// })();
+
 module.exports = permissionsModel;

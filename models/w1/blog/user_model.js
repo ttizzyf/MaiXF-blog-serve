@@ -84,4 +84,9 @@ let userModel = sequelize.define(
   }
 );
 
+// (async () => {
+//   await userModel.sync({ force: true });
+//   // 这里是代码
+// })();
+
 module.exports = userModel;

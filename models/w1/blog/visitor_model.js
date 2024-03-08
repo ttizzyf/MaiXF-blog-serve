@@ -71,4 +71,9 @@ let visitorModel = sequelize.define(
   }
 );
 
+// (async () => {
+//   await visitorModel.sync({ force: true });
+//   // 这里是代码
+// })();
+
 module.exports = visitorModel;

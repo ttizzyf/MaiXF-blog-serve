@@ -375,7 +375,9 @@ exports.get_comments_by_articleId = [
   async (req, res) => {
     try {
       let pm = {
-        where: {},
+        where: {
+          relatedArticleId: req.query.relatedArticleId,
+        },
         raw: true,
         include: [
           {
@@ -389,8 +391,8 @@ exports.get_comments_by_articleId = [
             as: "toUserInfo",
           },
         ],
+        order: [["createdAt", "DESC"]],
       };
-      pm.where = { relatedArticleId: req.query.relatedArticleId };
       messageModel.findAndCountAll(pm).then((list) => {
         let newList = modelData(list.rows, "userInfo", "userInfo");
         let toUserInfo = modelData(newList, "toUserInfo", "toUserInfo");
@@ -401,6 +403,44 @@ exports.get_comments_by_articleId = [
           res,
           "获取成功",
           list.count > 0 ? list : []
+        );
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+];
+
+/**
+ * 点赞文章
+ * @date 2023/3/6
+ * @param {Object} req - 请求对象，包含查询参数
+ * @param {Object} res - 响应对象
+ * @returns {Object} - 包含博文列表展示
+ */
+exports.blog_article_like = [
+  async (req, res, next) => {
+    try {
+      let pm = {
+        where: {
+          id: req.body.id,
+        },
+      };
+      seqUtils.findOne(blogArticleModel, pm, (data) => {
+        if (data.code === 808) {
+          return apiResponse.successResponse(res, "文章查询失败");
+        }
+        let newLikeNum = data.data.likeNum + 1;
+        seqUtils.update(
+          blogArticleModel,
+          { likeNum: newLikeNum },
+          { id: req.body.id },
+          (updateData) => {
+            if (updateData.code === 808) {
+              return apiResponse.successResponse(res, "更新点赞失败");
+            }
+            return apiResponse.successResponse(res, "点赞成功");
+          }
         );
       });
     } catch (err) {

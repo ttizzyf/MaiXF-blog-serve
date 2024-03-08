@@ -56,4 +56,9 @@ userModel.belongsTo(rolesModel, {
   as: "roleInfo",
 });
 
+// (async () => {
+//   await rolesModel.sync({ force: true });
+//   // 这里是代码
+// })();
+
 module.exports = rolesModel;

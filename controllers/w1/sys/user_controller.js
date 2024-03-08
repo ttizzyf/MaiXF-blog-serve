@@ -214,7 +214,6 @@ exports.login = [
           raw: true,
         },
         async (userData) => {
-          console.log(userData);
           if (!userData.data.status) {
             return apiResponse.ErrorResponse(
               res,
@@ -225,20 +224,20 @@ exports.login = [
           let newData = modelData([userData.data], "roleInfo", "roleInfo");
           userData.data = newData[0];
           // 权限查询
-          let peresPm = {
-            where: {
-              permissionId: {
-                [Op.in]: userData.data.roleInfo.perms.split("、"),
-              },
-            },
-            attributes: ["key"],
-            raw: true,
-          };
-          const peresData = await permissionsModel.findAll(peresPm);
-          let peresNewList = peresData.map((item) => {
-            return item.key;
-          });
-          userData.data.roleInfo.perms = peresNewList;
+          // let peresPm = {
+          //   where: {
+          //     permissionId: {
+          //       [Op.in]: userData.data.roleInfo.perms?.split("、"),
+          //     },
+          //   },
+          //   attributes: ["key"],
+          //   raw: true,
+          // };
+          // const peresData = await permissionsModel.findAll(peresPm);
+          // let peresNewList = peresData.map((item) => {
+          //   return item.key;
+          // });
+          // userData.data.roleInfo.perms = peresNewList;
           if (userData.code === 808) {
             return apiResponse.validationErrorWithData(res, "用户名或密码错误");
           }
