@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "SET NODE_ENV=production&& node app.js --mode production --host",
-    "dev": "SET NODE_ENV=development&& nodemon app.js --mode development"
+    "start": "cross-env NODE_ENV=production node app.js --mode production --host",
+    "dev": "cross-env NODE_ENV=development nodemon app.js --mode development"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "chalk": "^4.1.2",
     "connect-redis": "^7.1.0",

@@ -56,7 +56,7 @@ exports.browsing = [
         messageModel.count({
           where: {
             relatedArticleId: {
-              [Op.ne]: 0,
+              [Op.ne]: null,
             },
           },
           raw: true,
@@ -64,7 +64,7 @@ exports.browsing = [
         messageModel.count({
           where: {
             relatedArticleId: {
-              [Op.ne]: 0,
+              [Op.ne]: null,
             },
             createdAt: findToday,
           },
@@ -73,7 +73,7 @@ exports.browsing = [
         messageModel.count({
           where: {
             relatedArticleId: {
-              [Op.eq]: 0,
+              [Op.is]: null,
             },
           },
           raw: true,
@@ -81,14 +81,18 @@ exports.browsing = [
         messageModel.count({
           where: {
             relatedArticleId: {
-              [Op.eq]: 0,
+              [Op.is]: null,
             },
             createdAt: findToday,
           },
           raw: true,
         }),
       ]);
-      return apiResponse.successResponseWithData(res, "获取", response);
+      return apiResponse.successResponseWithData(
+        res,
+        "获取首页访客信息列表",
+        response
+      );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }

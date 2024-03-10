@@ -6,7 +6,7 @@
 
 const env = process.env.NODE_ENV; // 环境参数
 
-console.log(env);
+console.log(process.env.NODE_ENV);
 
 let MYSQL_CONF;
 let REDIS_CONF;
@@ -33,7 +33,7 @@ if (env === "production") {
   MYSQL_CONF = {
     host: "120.55.46.157",
     user: "root",
-    password: "w18880460748#",
+    password: "94493eedc7108246",
     port: "3306",
     database: "W_BLOG",
     dialect: "mysql",

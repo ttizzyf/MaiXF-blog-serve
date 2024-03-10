@@ -33,6 +33,7 @@ exports.userList = [
         email,
         nickname,
         attributes: { exclude: ["password"] },
+        order: [["createdAt", "ASC"]],
         include: [
           {
             model: rolesModel,
@@ -47,7 +48,6 @@ exports.userList = [
         : "";
       pm.email ? (pm.where.email = { [Op.like]: `%${pm.email}%` }) : "";
       sequeUtil.list(userModel, pm, (list) => {
-        console.log(list);
         let newData = modelData(list.data.data, "roleInfo", "roleInfo");
         list.data.data = newData;
         if (list.code === 808) {

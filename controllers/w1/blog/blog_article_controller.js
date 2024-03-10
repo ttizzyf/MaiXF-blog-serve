@@ -53,6 +53,7 @@ exports.client_blog_articleList = [
         category = "",
         recommended = "",
         isReship = "",
+        status = "",
       } = req.query;
       let pm = {
         where: {
@@ -60,9 +61,7 @@ exports.client_blog_articleList = [
           category,
           recommended,
           isReship,
-          status: {
-            [Op.not]: 0,
-          },
+          status: {},
         },
         pageSize,
         pageNum,
@@ -94,6 +93,12 @@ exports.client_blog_articleList = [
       pm.where.title
         ? (pm.where.title = { [Op.substring]: `%${pm.where.title}%` })
         : (pm.where.title = "");
+      status
+        ? (pm.where.status = { [Op.eq]: status })
+        : (pm.where.status = { [Op.ne]: 0 });
+      typeof recommended === "number"
+        ? (pm.where.recommended = { [Op.eq]: recommended })
+        : "";
       seqUtils.list(blogArticleModel, pm, async (list) => {
         let newList = modelData(list.data.data, objStr, objStr);
         list.data.data = newList;

@@ -18,6 +18,7 @@ const blog_article_controller = require("../../../controllers/w1/blog/blog_artic
  * @param {string} sortOrder 正序或者倒叙排列
  * @param {string} recommended 是否精选(0是精选，1是非精选)
  * @param {string} category 博文分类
+ * @param {string} status 状态发布和草稿(0是删除,1是发布,2是草稿)
  * @returns {object} 200 - {"status": 1,"message": "success.","data": {...},"time": 1680598858753}
  * @returns {Error}  default - Unexpected error
  */

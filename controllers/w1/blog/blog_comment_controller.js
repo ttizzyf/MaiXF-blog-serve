@@ -8,6 +8,7 @@ const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js
 const messageModel = require("../../../models/w1/blog/message_model.js");
 const userModel = require("../../../models/w1/blog/user_model.js");
 const blogArticleModel = require("../../../models/w1/blog/blog_article_model.js");
+const rolesModel = require("../../../models/w1/blog/roles_model.js");
 const { modelData } = require("../../../utils/otherUtils.js");
 const { deleteNullObj } = require("../../../utils/otherUtils.js");
 const { sendEmail } = require("../../../utils/sendEmail.js");
@@ -48,6 +49,13 @@ exports.client_blog_commentList = [
           model: userModel,
           attributes: { exclude: ["password"] },
           as: "userInfo",
+          include: [
+            {
+              model: rolesModel,
+              attributes: ["roleAuth", "roleName", "remark"],
+              as: "roleInfo",
+            },
+          ],
         },
         {
           model: blogArticleModel,
@@ -310,6 +318,13 @@ exports.client_blog_manage_MessageList = [
           model: userModel,
           attributes: { exclude: ["password"] },
           as: "userInfo",
+          include: [
+            {
+              model: rolesModel,
+              attributes: ["roleAuth", "roleName", "remark"],
+              as: "roleInfo",
+            },
+          ],
         },
       ];
       pm.sort = {
@@ -333,11 +348,25 @@ exports.client_blog_manage_MessageList = [
                 model: userModel,
                 attributes: { exclude: ["password"] },
                 as: "userInfo",
+                include: [
+                  {
+                    model: rolesModel,
+                    attributes: ["roleAuth", "roleName", "remark"],
+                    as: "roleInfo",
+                  },
+                ],
               },
               {
                 model: userModel,
                 attributes: { exclude: ["password"] },
                 as: "toUserInfo",
+                include: [
+                  {
+                    model: rolesModel,
+                    attributes: ["roleAuth", "roleName", "remark"],
+                    as: "roleInfo",
+                  },
+                ],
               },
             ],
           };

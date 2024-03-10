@@ -103,7 +103,7 @@ exports.register = [
         platform: equipment,
         userIp: clientIP,
         // 默认为访客权限
-        roleId: "c4ac5f86-c6c5-4367-959b-4498d55f45f2",
+        roleId: "33f7bc3f-b097-4796-b901-4d201a38fe7b",
         address,
       };
       const addInfo = userModel.create(newUser);
@@ -224,20 +224,20 @@ exports.login = [
           let newData = modelData([userData.data], "roleInfo", "roleInfo");
           userData.data = newData[0];
           // 权限查询
-          // let peresPm = {
-          //   where: {
-          //     permissionId: {
-          //       [Op.in]: userData.data.roleInfo.perms?.split("、"),
-          //     },
-          //   },
-          //   attributes: ["key"],
-          //   raw: true,
-          // };
-          // const peresData = await permissionsModel.findAll(peresPm);
-          // let peresNewList = peresData.map((item) => {
-          //   return item.key;
-          // });
-          // userData.data.roleInfo.perms = peresNewList;
+          let peresPm = {
+            where: {
+              permissionId: {
+                [Op.in]: userData.data.roleInfo.perms?.split("、"),
+              },
+            },
+            attributes: ["key"],
+            raw: true,
+          };
+          const peresData = await permissionsModel.findAll(peresPm);
+          let peresNewList = peresData.map((item) => {
+            return item.key;
+          });
+          userData.data.roleInfo.perms = peresNewList;
           if (userData.code === 808) {
             return apiResponse.validationErrorWithData(res, "用户名或密码错误");
           }
