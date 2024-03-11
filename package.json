@@ -2,6 +2,11 @@
   "name": "server",
   "version": "0.0.0",
   "private": true,
+  "nodemonConfig": {
+    "ignore": [
+      "./webSetting.js"
+    ]
+  },
   "scripts": {
     "start": "cross-env NODE_ENV=production node app.js --mode production --host",
     "dev": "cross-env NODE_ENV=development nodemon app.js --mode development"
