@@ -175,6 +175,7 @@ exports.emailConfirmCode = [
  * @param {string}  email 邮箱账号
  * @param {string}  password 密码
  * @param {string}  code 验证码
+ * @param {string}  visitor 是否为访客登录模式
  * @returns {Object} - 包含用户信息展示
  */
 
@@ -191,12 +192,14 @@ exports.login = [
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(res, errors.array()[0].msg);
       }
-      const { code } = req.session;
-      if (!code) {
-        return apiResponse.validationErrorWithData(res, "验证码已经失效");
-      }
-      if (code !== req.body.code) {
-        return apiResponse.validationErrorWithData(res, "验证码错误");
+      if (!req.body?.visitor) {
+        const { code } = req.session;
+        if (!code) {
+          return apiResponse.validationErrorWithData(res, "验证码已经失效");
+        }
+        if (code !== req.body.code) {
+          return apiResponse.validationErrorWithData(res, "验证码错误");
+        }
       }
       sequeUtil.findOne(
         userModel,

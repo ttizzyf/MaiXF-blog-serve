@@ -31,6 +31,15 @@ router.get("/captcha", user_controller.captcha);
 router.post("/login", user_controller.login);
 
 /**
+ * 访客登录
+ * @route POST /w1/sys/auth/login
+ * @group 权限验证 - 登录注册相关
+ * @param {string} email 邮箱
+ * @returns {object} 200 - {"status": 1,"message": "登录成功.","data": {...},"time": 1680598858753}
+ * @returns {Error}  default - Unexpected error
+ */
+
+/**
  * 用户注册
  * @route POST /w1/sys/auth/register
  * @group 权限验证 - 登录注册相关

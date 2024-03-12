@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const apiResponse = require("../../../utils/apiResponse.js");
-const webSetting = require("../../../webSetting.js");
 const tokenAuthentication = require("../../../middlewares/tokenAuthentication.js");
 const {
   checkApiPermission,
@@ -17,6 +16,7 @@ const {
 exports.setting = [
   async (req, res, next) => {
     try {
+      const webSetting = require("../../../webSetting.js");
       return apiResponse.successResponseWithData(res, "加载成功", webSetting);
     } catch (err) {
       next(err);
