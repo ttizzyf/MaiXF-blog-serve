@@ -217,7 +217,10 @@ exports.login = [
           raw: true,
         },
         async (userData) => {
-          if (!userData.data.status) {
+          console.log(userData.data);
+          if (!userData.data)
+            return apiResponse.ErrorResponse(res, "该用户不存在");
+          if (!userData.data?.status) {
             return apiResponse.ErrorResponse(
               res,
               "当前账户已被禁用,请与管理员联系"

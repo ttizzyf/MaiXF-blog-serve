@@ -35,7 +35,7 @@ if (env === "production") {
     user: "root",
     password: "94493eedc7108246",
     port: "3306",
-    database: "W_BLOG",
+    database: "W_BLOG_PRODUCTION",
     dialect: "mysql",
   };
   REDIS_CONF = {

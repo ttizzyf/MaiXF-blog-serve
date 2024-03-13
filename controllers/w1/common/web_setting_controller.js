@@ -16,8 +16,14 @@ const {
 exports.setting = [
   async (req, res, next) => {
     try {
-      const webSetting = require("../../../webSetting.js");
-      return apiResponse.successResponseWithData(res, "加载成功", webSetting);
+      const filePath = path.join(__dirname, "../../../webSetting.json");
+      fs.readFile(filePath, "utf8", (err, data) => {
+        if (err) {
+          return next(err);
+        }
+        let webSetting = JSON.parse(data);
+        return apiResponse.successResponseWithData(res, "加载成功", webSetting);
+      });
     } catch (err) {
       next(err);
     }
@@ -36,12 +42,8 @@ exports.update = [
   checkApiPermission("common:setting:update"),
   async (req, res, next) => {
     try {
-      const newSettingsString = `module.exports = ${JSON.stringify(
-        req.body,
-        null,
-        2
-      )};`;
-      const filePath = path.join(__dirname, "../../../webSetting.js");
+      const newSettingsString = JSON.stringify(req.body);
+      const filePath = path.join(__dirname, "../../../webSetting.json");
       fs.writeFile(filePath, newSettingsString, (err) => {
         if (err) {
           apiResponse.ErrorResponse(res, "配置更新失败");
