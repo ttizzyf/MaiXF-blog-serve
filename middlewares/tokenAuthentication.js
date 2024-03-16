@@ -9,7 +9,6 @@
  * @param {Object} res - 响应对象
  * @param {Function} next - 下一个中间件函数
  * @returns {void}
- *
  * @throws {Error} - 如果身份验证失败，则抛出错误
  */
 

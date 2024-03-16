@@ -10,9 +10,6 @@ const chalk = require("chalk");
 const scheduler = require("./scheduler");
 const isDev = process.env.NODE_ENV === "development";
 const sessionAuth = require("./middlewares/sessionMiddleware");
-const redisClient = require("./db/redis.js");
-const RedisStore = require("connect-redis").default;
-const sequelize = require("sequelize");
 // 响应api工具函数
 const apiResponse = require("./utils/apiResponse.js");
 // 可以指定目录,进行解析分配路由,每一层路由就是
@@ -70,10 +67,6 @@ if (isDev) {
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
-const sessionStore = new RedisStore({
-  client: redisClient,
-});
 
 // 监听SIGINT信号，当应用程序被强制关闭时停止所有定时任务
 process.on("SIGINT", (signal) => {

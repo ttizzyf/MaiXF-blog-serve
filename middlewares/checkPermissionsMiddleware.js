@@ -56,7 +56,7 @@ const checkApiPermission = (permission) => {
                 console.error(
                   chalk.red("【权限已被禁用】: " + req.method + req.baseUrl)
                 );
-                return apiResponse.unauthorizedResponse(
+                return apiResponse.ErrorResponse(
                   res,
                   "您访问的权限已被禁用，请联系管理员"
                 );
@@ -76,7 +76,7 @@ const checkApiPermission = (permission) => {
               console.error(
                 chalk.bold.red("*********************************")
               );
-              return apiResponse.unauthorizedResponse(
+              return apiResponse.ErrorResponse(
                 res,
                 "您暂时没有权限访问,请联系管理员"
               );
@@ -89,7 +89,7 @@ const checkApiPermission = (permission) => {
       console.error(err);
       console.error(chalk.red("【    DATE】: " + new Date().toLocaleString()));
       console.error(chalk.bold.red("*********************************"));
-      return apiResponse.unauthorizedResponse(res, "接口权限验证错误");
+      return apiResponse.validationErrorWithData(res, "接口权限验证错误", err);
     }
   };
 };

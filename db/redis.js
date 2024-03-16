@@ -6,11 +6,7 @@ const redisClient = redis
   .createClient({
     url: `redis://${REDIS_CONF.host}:${REDIS_CONF.port}`,
   })
-  .connect(() => {
-    console.log(chalk.bold.green("----------REDIS连接成功------------"));
-  })
-  .catch((err) => {
-    console.error(chalk.bold.red("----------REDIS连接出错------------", err));
-  });
+  .on("error", (err) => console.log("Redis Client Error", err))
+  .connect();
 
 module.exports = redisClient;

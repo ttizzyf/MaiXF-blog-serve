@@ -66,13 +66,13 @@ exports.register = [
       let { emailCode } = req.session;
       console.log(chalk.bold.green(emailCode));
       if (!emailCode) {
-        return apiResponse.unauthorizedResponse(
+        return apiResponse.ErrorResponse(
           res,
           "邮箱验证码已过期,请重新发送"
         );
       }
       if (emailCode != req.body.emailCode) {
-        return apiResponse.unauthorizedResponse(
+        return apiResponse.ErrorResponse(
           res,
           "邮箱验证码错误,请重新提交"
         );
@@ -152,7 +152,7 @@ exports.emailConfirmCode = [
           attributes: ["email"],
         });
         if (userInfo) {
-          return apiResponse.unauthorizedResponse(res, "邮箱号码已验证");
+          return apiResponse.ErrorResponse(res, "邮箱号码已验证");
         }
         let newCode = randomNum(4);
         console.log(chalk.bold.green(newCode));

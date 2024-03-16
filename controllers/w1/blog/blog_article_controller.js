@@ -320,6 +320,7 @@ exports.get_blog_select_list = [
   async (req, res, next) => {
     try {
       let pm = {
+        where: { status: 1 },
         attributes: ["id", "title"],
         raw: true,
       };
